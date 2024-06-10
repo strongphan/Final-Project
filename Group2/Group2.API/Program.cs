@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen();
 
 //Db connection
 var connectionString = builder.Configuration.GetConnectionString("AssetManager");
-builder.Services.AddDbContext<LibraryContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<AssetContext>(options => options.UseSqlServer(connectionString));
 
 //Add Mapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

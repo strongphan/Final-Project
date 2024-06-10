@@ -6,9 +6,9 @@ namespace Group2.Infrastructure.Repository
 {
     public abstract class BaseRepo<TEntity> : IBaseRepo<TEntity> where TEntity : class
     {
-        protected LibraryContext _context;
+        protected AssetContext _context;
         protected DbSet<TEntity> _table;
-        public BaseRepo(LibraryContext dbContext)
+        public BaseRepo(AssetContext dbContext)
         {
             _context = dbContext;
             _table = _context.Set<TEntity>();

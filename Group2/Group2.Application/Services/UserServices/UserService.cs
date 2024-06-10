@@ -32,7 +32,7 @@ namespace Group2.Application.Services.UserServices
             {
                 user.Password = BCrypt.Net.BCrypt.HashPassword(changePasswordDTO.NewPassword);
                 user.ModifiedAt = DateTime.UtcNow;
-                user.ModifiedBy = user.Name;
+                user.ModifiedBy = user.FirstName;
                 try
                 {
                     await _userRepo.UpdateAsync(user);
@@ -73,10 +73,10 @@ namespace Group2.Application.Services.UserServices
 
             var user = new User
             {
-                Name = dto.Name,
+                FirstName = dto.Name,
                 Email = dto.Email,
                 Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                Role = Domain.Enum.Role.User,
+                Type = Domain.Enum.Role.Admin,
                 CreatedAt = DateTime.UtcNow,
                 ModifiedAt = DateTime.UtcNow,
                 CreatedBy = "ManhPhan",

@@ -7,7 +7,7 @@ namespace Group2.Infrastructure.Repository
 {
 
 
-    public class UserRepo(LibraryContext context) : BaseRepo<User>(context), IUserRepo
+    public class UserRepo(AssetContext context) : BaseRepo<User>(context), IUserRepo
     {
         public async Task<User?> FindUserByEmailAsync(string email) => await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
     }
