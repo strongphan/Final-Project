@@ -14,5 +14,6 @@ namespace Group2.Domain.Entities
         public DateTime AssignedDate { get; set; }
 
         public DateTime? ReturnedDate { get; set; }
+
     }
 }

@@ -9,7 +9,7 @@ namespace Group2.Infrastructure.Repository
 {
 
 
-    public class UserRepository : BaseRepoitory<User>, IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
         private readonly AssetContext _assetContext;
         public UserRepository(AssetContext context) : base(context)
@@ -70,7 +70,7 @@ namespace Group2.Infrastructure.Repository
             "name" => user => user.FirstName,
             "date" => user => user.JoinedDate,
             "type" => user => user.Type,
-            _ => user => user.StaffCode
+            _ => user => user.FirstName
         };
     }
 }

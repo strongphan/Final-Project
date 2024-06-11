@@ -17,7 +17,7 @@ namespace Group2.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(Guid id)
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
             var dto = await _userService.GetByIdAsync(id);
             return Ok(dto);

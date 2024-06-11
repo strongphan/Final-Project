@@ -4,17 +4,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Group2.Infrastructure.Repository
 {
-    public abstract class BaseRepoitory<TEntity> : IBaseRepository<TEntity> where TEntity : class
+    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
         protected AssetContext _context;
         protected DbSet<TEntity> _table;
-        public BaseRepoitory(AssetContext dbContext)
+        public BaseRepository(AssetContext dbContext)
         {
             _context = dbContext;
             _table = _context.Set<TEntity>();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await _table.ToListAsync();
 
@@ -26,19 +26,19 @@ namespace Group2.Infrastructure.Repository
             return await _table.FindAsync(id);
         }
 
-        public async Task InsertAsync(TEntity entity)
+        public virtual async Task InsertAsync(TEntity entity)
         {
             _table.Add(entity);
             await SaveChangeAsync();
         }
 
-        public async Task UpdateAsync(TEntity entity)
+        public virtual async Task UpdateAsync(TEntity entity)
         {
             _table.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
             await SaveChangeAsync();
         }
-        public async Task DeleteAsync(TEntity entity)
+        public virtual async Task DeleteAsync(TEntity entity)
         {
             _table.Remove(entity);
             await SaveChangeAsync();
