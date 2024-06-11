@@ -1,4 +1,5 @@
-﻿using Group2.Application.DTOs.AuthDTOs;
+﻿using Group2.Application.Common.Paging;
+using Group2.Application.DTOs.AuthDTOs;
 using Group2.Application.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,9 +7,14 @@ namespace Group2.API.Controllers
 {
     [Route("api/users")]
     [ApiController]
-    public class UsersController(IUserService userService) : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService = userService;
+        private readonly IUserService _userService;
+
+        public UsersController(IUserService userService)
+        {
+            _userService = userService;
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
@@ -22,17 +28,17 @@ namespace Group2.API.Controllers
             var result = await _userService.LoginAsync(dto);
             return Ok(result);
         }
-        [HttpPost("register")]
-        public async Task<ActionResult<LoginResponse>> RegisterAsync(RegisterUserDto dto)
-        {
-            var result = await _userService.RegisterAsync(dto);
-            return Ok(result);
-        }
         [HttpPost("change_password")]
         public async Task<ActionResult<LoginResponse>> ChangePasswordAsync(ChangePasswordDTO dto)
         {
             var result = await _userService.ChangePasswordAsync(dto);
             return Ok(result);
+        }
+        [HttpPost("filter")]
+        public async Task<IActionResult> GetFilterAsync(FilterRequest request)
+        {
+            var res = await _userService.GetFilterAsync(request);
+            return Ok(res);
         }
     }
 

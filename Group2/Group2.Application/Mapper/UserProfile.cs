@@ -8,8 +8,8 @@ namespace Group2.Application.Mapper
     {
         public UserProfile()
         {
-            CreateMap<User, UserDTO>();
-            CreateMap<User, UserLessDTO>();
+            CreateMap<User, UserResponse>();
+            CreateMap<UserDTO, User>();
         }
     }
 }

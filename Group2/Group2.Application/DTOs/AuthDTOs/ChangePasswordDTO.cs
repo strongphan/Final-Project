@@ -5,11 +5,12 @@ namespace Group2.Application.DTOs.AuthDTOs
     public class ChangePasswordDTO
     {
         [Required]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         [Required]
         public string? OldPassword { get; set; } = string.Empty;
         [Required]
         public string? NewPassword { get; set; } = string.Empty;
+
         [Required, Compare(nameof(NewPassword))]
         public string? ConfirmPassword { get; set; } = string.Empty;
     }

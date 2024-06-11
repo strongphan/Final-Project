@@ -75,7 +75,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 //User services
-builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();

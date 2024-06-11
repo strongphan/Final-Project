@@ -1,6 +1,6 @@
 ﻿namespace Group2.Application.IRepositories
 {
-    public interface IBaseRepo<TEntity> where TEntity : class
+    public interface IBaseRepository<TEntity> where TEntity : class
     {
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity?> GetByIdAsync(Guid id);

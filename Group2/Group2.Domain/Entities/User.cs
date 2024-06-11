@@ -5,35 +5,30 @@ namespace Group2.Domain.Entity
 {
     public class User : BaseEntity
     {
-
+        [StringLength(maximumLength: 7)]
         public string StaffCode { get; set; }
 
-        public string Username { get; set; }
+        [StringLength(maximumLength: 20)]
+        public string UserName { get; set; }
 
-        [Required]
+        [StringLength(maximumLength: 20)]
+        public string Password { get; set; }
+
+        [StringLength(maximumLength: 20)]
         public string FirstName { get; set; }
 
-        [Required]
+        [StringLength(maximumLength: 20)]
         public string LastName { get; set; }
 
-        [Required]
         public DateTime DateOfBirth { get; set; }
 
-        [Required]
         public DateTime JoinedDate { get; set; }
 
-        [Required]
         public Gender Gender { get; set; }
 
-        [Required]
         public Role Type { get; set; }
 
-        [Required]
+        [StringLength(maximumLength: 30)]
         public string Location { get; set; }
-        [Required]
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        [Required]
-        public string Password { get; set; }
     }
 }

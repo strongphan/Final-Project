@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Group2.Application.AuthProvide;
+using Group2.Application.Common.Paging;
 using Group2.Application.DTOs.AuthDTOs;
 using Group2.Application.IRepositories;
 using Group2.Domain.Entity;
@@ -7,16 +8,22 @@ using Group2.Domain.Exceptions;
 
 namespace Group2.Application.Services.UserServices
 {
-    public class UserService(IUserRepo userRepo, ITokenService tokenService, IMapper mapper) : IUserService
+    public class UserService : IUserService
     {
-        private readonly IUserRepo _userRepo = userRepo;
-        private readonly ITokenService _tokenService = tokenService;
-        private readonly IMapper _mapper = mapper;
+        private readonly IUserRepository _userRepo;
+        private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
-        public async Task<UserDTO> GetByIdAsync(Guid id)
+        public UserService(IUserRepository userRepo, ITokenService tokenService, IMapper mapper)
+        {
+            _userRepo = userRepo;
+            _tokenService = tokenService;
+            _mapper = mapper;
+        }
+        public async Task<UserResponse> GetByIdAsync(Guid id)
         {
             var entity = await _userRepo.GetByIdAsync(id) ?? throw new NotFoundException();
-            var dto = _mapper.Map<UserDTO>(entity);
+            var dto = _mapper.Map<UserResponse>(entity);
             return dto;
 
         }
@@ -45,11 +52,11 @@ namespace Group2.Application.Services.UserServices
                 return true;
             }
         }
-        public async Task<User?> FindUserByEmailAsync(string email) => await _userRepo.FindUserByEmailAsync(email);
+        public async Task<User?> FindUserByUserNameAsync(string email) => await _userRepo.FindUserByUserNameAsync(email);
 
         public async Task<LoginResponse> LoginAsync(LoginDTO dto)
         {
-            var getUser = await FindUserByEmailAsync(dto.Email!);
+            var getUser = await FindUserByUserNameAsync(dto.UserName!);
             if (getUser == null)
                 return new LoginResponse(false, "User not found");
 
@@ -65,25 +72,12 @@ namespace Group2.Application.Services.UserServices
             }
         }
 
-        public async Task<RegistrationResponse> RegisterAsync(RegisterUserDto dto)
-        {
-            var getUser = await FindUserByEmailAsync(dto.Email!);
-            if (getUser != null)
-                return new RegistrationResponse(false, "User already exist");
 
-            var user = new User
-            {
-                FirstName = dto.Name,
-                Email = dto.Email,
-                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                Type = Domain.Enum.Role.Admin,
-                CreatedAt = DateTime.UtcNow,
-                ModifiedAt = DateTime.UtcNow,
-                CreatedBy = "ManhPhan",
-                ModifiedBy = "ManhPhan",
-            };
-            await _userRepo.InsertAsync(user);
-            return new RegistrationResponse(true, "Register success");
+        public async Task<PaginationResponse<UserResponse>> GetFilterAsync(FilterRequest request)
+        {
+            var res = await _userRepo.GetFilterAsync(request);
+            var dtos = _mapper.Map<IEnumerable<UserResponse>>(res.Data);
+            return new(dtos, res.TotalCount);
 
         }
 

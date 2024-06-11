@@ -9,6 +9,7 @@ namespace Group2.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -17,7 +18,7 @@ namespace Group2.Infrastructure.Data
                 .IsUnique();
 
             modelBuilder.Entity<User>()
-                .HasIndex(u => u.Username)
+                .HasIndex(u => u.UserName)
                 .IsUnique();
 
             modelBuilder.Entity<Assignment>()
@@ -29,6 +30,10 @@ namespace Group2.Infrastructure.Data
                 .HasOne(a => a.Asset)
                 .WithMany()
                 .HasForeignKey(a => a.AssetId);
+            modelBuilder.Entity<Asset>()
+               .HasOne(b => b.Category)
+               .WithMany(c => c.Assets)
+               .HasForeignKey(b => b.CategoryId);
         }
     }
 }
