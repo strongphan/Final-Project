@@ -1,7 +1,7 @@
-﻿using Group2.Domain.Entity;
+﻿using Backend.Domain.Entity;
 using System.Security.Claims;
 
-namespace Group2.Application.AuthProvide
+namespace Backend.Application.AuthProvide
 {
     public interface ITokenService
     {

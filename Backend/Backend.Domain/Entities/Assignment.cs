@@ -1,6 +1,6 @@
-﻿using Group2.Domain.Entity;
+﻿using Backend.Domain.Entity;
 
-namespace Group2.Domain.Entities
+namespace Backend.Domain.Entities
 {
     public class Assignment : BaseEntity
     {

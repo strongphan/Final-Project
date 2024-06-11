@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Group2.Infrastructure.Migrations
+namespace Backend.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class inti : Migration

@@ -1,7 +1,7 @@
-﻿using Group2.Domain.Enum;
+﻿using Backend.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 
-namespace Group2.Application.DTOs.AuthDTOs
+namespace Backend.Application.DTOs.AuthDTOs
 {
     public class UserDTO
     {

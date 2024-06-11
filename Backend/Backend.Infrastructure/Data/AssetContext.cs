@@ -1,8 +1,8 @@
-﻿using Group2.Domain.Entities;
-using Group2.Domain.Entity;
+﻿using Backend.Domain.Entities;
+using Backend.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Group2.Infrastructure.Data
+namespace Backend.Infrastructure.Data
 {
     public class AssetContext : DbContext
     {

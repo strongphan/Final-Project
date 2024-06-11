@@ -1,7 +1,7 @@
-﻿using Group2.Application.Common.Paging;
-using Group2.Domain.Entity;
+﻿using Backend.Application.Common.Paging;
+using Backend.Domain.Entity;
 
-namespace Group2.Application.IRepositories
+namespace Backend.Application.IRepositories
 {
     public interface IUserRepository : IBaseRepository<User>
     {

@@ -1,11 +1,11 @@
-﻿using Group2.Domain.Entity;
+﻿using Backend.Domain.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Group2.Application.AuthProvide
+namespace Backend.Application.AuthProvide
 {
     public sealed class TokenService : ITokenService
     {

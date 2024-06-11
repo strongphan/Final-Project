@@ -1,9 +1,9 @@
-﻿using Group2.Application.Common.Paging;
-using Group2.Application.DTOs.AuthDTOs;
-using Group2.Application.Services.UserServices;
+﻿using Backend.Application.Common.Paging;
+using Backend.Application.DTOs.AuthDTOs;
+using Backend.Application.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Group2.API.Controllers
+namespace Backend.API.Controllers
 {
     [Route("api/users")]
     [ApiController]

@@ -1,7 +1,7 @@
-﻿using Group2.Domain.Enum;
+﻿using Backend.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 
-namespace Group2.Domain.Entity
+namespace Backend.Domain.Entity
 {
     public class User : BaseEntity
     {

@@ -1,8 +1,8 @@
-﻿using Group2.Application.IRepositories;
-using Group2.Infrastructure.Data;
+﻿using Backend.Application.IRepositories;
+using Backend.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Group2.Infrastructure.Repository
+namespace Backend.Infrastructure.Repository
 {
     public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {

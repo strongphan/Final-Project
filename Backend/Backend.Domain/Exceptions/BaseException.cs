@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Group2.Domain.Exceptions
+namespace Backend.Domain.Exceptions
 {
     public class BaseException
     {

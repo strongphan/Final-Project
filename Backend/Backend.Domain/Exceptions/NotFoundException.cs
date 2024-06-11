@@ -1,7 +1,7 @@
-﻿using Group2.Domain.Resource;
+﻿using Backend.Domain.Resource;
 using System.Net;
 
-namespace Group2.Domain.Exceptions
+namespace Backend.Domain.Exceptions
 {
     public class NotFoundException : Exception
     {

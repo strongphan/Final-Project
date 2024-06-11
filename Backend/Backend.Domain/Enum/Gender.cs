@@ -1,4 +1,4 @@
-﻿namespace Group2.Domain.Enum
+﻿namespace Backend.Domain.Enum
 {
     public enum Gender
     {

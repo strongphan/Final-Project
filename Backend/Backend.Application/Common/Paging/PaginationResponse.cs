@@ -1,4 +1,4 @@
-﻿namespace Group2.Application.Common.Paging
+﻿namespace Backend.Application.Common.Paging
 {
     public class PaginationResponse<TEntity>
     {
