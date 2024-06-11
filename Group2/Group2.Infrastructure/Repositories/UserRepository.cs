@@ -7,8 +7,6 @@ using System.Linq.Expressions;
 
 namespace Group2.Infrastructure.Repository
 {
-
-
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
         private readonly AssetContext _assetContext;
