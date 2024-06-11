@@ -30,5 +30,6 @@ namespace Group2.Domain.Entity
 
         [StringLength(maximumLength: 30)]
         public string Location { get; set; }
+        public bool FirstLogin { get; set; } = true;
     }
 }

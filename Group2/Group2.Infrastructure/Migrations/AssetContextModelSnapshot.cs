@@ -176,6 +176,9 @@ namespace Group2.Infrastructure.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("FirstLogin")
+                        .HasColumnType("bit");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(20)

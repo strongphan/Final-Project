@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Group2.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class inti : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,9 +18,9 @@ namespace Group2.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: true)
                 },
@@ -35,19 +35,20 @@ namespace Group2.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StaffCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StaffCode = table.Column<string>(type: "nvarchar(7)", maxLength: 7, nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     JoinedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    FirstLogin = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: true)
                 },
@@ -62,15 +63,15 @@ namespace Group2.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AssetCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AssetName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AssetCode = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
+                    AssetName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    Specification = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Specification = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: true),
                     InstalledDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    State = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: true)
                 },
@@ -95,9 +96,9 @@ namespace Group2.Infrastructure.Migrations
                     AssetId = table.Column<int>(type: "int", nullable: false),
                     AssignedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReturnedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: true)
                 },

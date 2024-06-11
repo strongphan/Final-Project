@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Group2.Infrastructure.Migrations
 {
     [DbContext(typeof(AssetContext))]
-    [Migration("20240611033721_update1")]
-    partial class update1
+    [Migration("20240611104410_inti")]
+    partial class inti
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -178,6 +178,9 @@ namespace Group2.Infrastructure.Migrations
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("FirstLogin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

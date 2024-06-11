@@ -17,6 +17,6 @@ namespace Group2.Domain.Entities
         [StringLength(maximumLength: 600)]
         public string? Specification { get; set; }
         public DateTime InstalledDate { get; set; }
-        public State State { get; set; }
+        public AssigmentState State { get; set; }
     }
 }
