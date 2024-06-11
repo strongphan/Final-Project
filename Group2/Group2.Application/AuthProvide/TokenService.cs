@@ -54,7 +54,7 @@ namespace Group2.Application.AuthProvide
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                      new Claim(ClaimTypes.Locality, user.Location),
                     new Claim(ClaimTypes.Role, user.Type.ToString()),
-                }
+                };
             if (additionalClaims?.Any() == true)
                 claims.AddRange(additionalClaims!);
 

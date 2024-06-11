@@ -1,11 +1,10 @@
 ﻿namespace Group2.Domain.Enum
 {
-    public enum State
+    public enum AssigmentState
     {
-        Available = 0,
-        NotAvailable = 1,
-        WatingForRecycling = 2,
-        Recycled = 3,
-        Assigned = 4
+        Accepted = 0,
+        WatingForAcceptance = 2,
+        Completed = 3,
+        WaitingForReturning = 4
     }
 }
