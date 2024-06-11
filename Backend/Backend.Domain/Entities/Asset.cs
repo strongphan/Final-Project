@@ -1,8 +1,8 @@
-﻿using Group2.Domain.Entity;
-using Group2.Domain.Enum;
+﻿using Backend.Domain.Entity;
+using Backend.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 
-namespace Group2.Domain.Entities
+namespace Backend.Domain.Entities
 {
     public class Asset : BaseEntity
     {

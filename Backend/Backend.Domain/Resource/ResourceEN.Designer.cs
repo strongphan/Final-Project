@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Group2.Domain.Resource {
+namespace Backend.Domain.Resource {
     using System;
     
     

@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Group2.Application.AuthProvide;
-using Group2.Application.Common.Paging;
-using Group2.Application.DTOs.AuthDTOs;
-using Group2.Application.IRepositories;
-using Group2.Domain.Entity;
-using Group2.Domain.Exceptions;
+using Backend.Application.AuthProvide;
+using Backend.Application.Common.Paging;
+using Backend.Application.DTOs.AuthDTOs;
+using Backend.Application.IRepositories;
+using Backend.Domain.Entity;
+using Backend.Domain.Exceptions;
 
-namespace Group2.Application.Services.UserServices
+namespace Backend.Application.Services.UserServices
 {
     public class UserService : IUserService
     {

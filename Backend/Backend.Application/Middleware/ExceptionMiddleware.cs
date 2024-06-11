@@ -1,8 +1,8 @@
-﻿using Group2.Domain.Exceptions;
-using Group2.Domain.Resource;
+﻿using Backend.Domain.Exceptions;
+using Backend.Domain.Resource;
 using Microsoft.AspNetCore.Http;
 
-namespace Group2.Application.Middleware
+namespace Backend.Application.Middleware
 {
     public class ExceptionMiddleware
     {

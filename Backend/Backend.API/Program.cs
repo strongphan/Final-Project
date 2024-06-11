@@ -1,9 +1,9 @@
-using Group2.Application.AuthProvide;
-using Group2.Application.IRepositories;
-using Group2.Application.Middleware;
-using Group2.Application.Services.UserServices;
-using Group2.Infrastructure.Data;
-using Group2.Infrastructure.Repository;
+using Backend.Application.AuthProvide;
+using Backend.Application.IRepositories;
+using Backend.Application.Middleware;
+using Backend.Application.Services.UserServices;
+using Backend.Infrastructure.Data;
+using Backend.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;

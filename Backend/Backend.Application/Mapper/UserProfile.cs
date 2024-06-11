@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Group2.Application.DTOs.AuthDTOs;
-using Group2.Domain.Entity;
+using Backend.Application.DTOs.AuthDTOs;
+using Backend.Domain.Entity;
 
-namespace Group2.Application.Mapper
+namespace Backend.Application.Mapper
 {
     public class UserProfile : Profile
     {

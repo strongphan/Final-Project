@@ -1,4 +1,4 @@
-﻿namespace Group2.Application.IRepositories
+﻿namespace Backend.Application.IRepositories
 {
     public interface IBaseRepository<TEntity> where TEntity : class
     {

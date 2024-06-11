@@ -1,7 +1,7 @@
-﻿using Group2.Domain.Entities;
+﻿using Backend.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace Group2.Domain.Entity
+namespace Backend.Domain.Entity
 {
     public class Category : BaseEntity
     {

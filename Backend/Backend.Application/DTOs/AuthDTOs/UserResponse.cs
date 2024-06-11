@@ -1,6 +1,6 @@
-﻿using Group2.Domain.Enum;
+﻿using Backend.Domain.Enum;
 
-namespace Group2.Application.DTOs.AuthDTOs
+namespace Backend.Application.DTOs.AuthDTOs
 {
     public class UserResponse
     {

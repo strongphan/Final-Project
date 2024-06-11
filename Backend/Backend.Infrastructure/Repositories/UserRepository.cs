@@ -1,11 +1,11 @@
-﻿using Group2.Application.Common.Paging;
-using Group2.Application.IRepositories;
-using Group2.Domain.Entity;
-using Group2.Infrastructure.Data;
+﻿using Backend.Application.Common.Paging;
+using Backend.Application.IRepositories;
+using Backend.Domain.Entity;
+using Backend.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Group2.Infrastructure.Repository
+namespace Backend.Infrastructure.Repository
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
