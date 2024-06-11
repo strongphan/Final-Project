@@ -69,8 +69,8 @@ namespace Group2.Infrastructure.Repository
             "code" => user => user.StaffCode,
             "name" => user => user.FirstName,
             "date" => user => user.JoinedDate,
-            "type" => user => user.FirstName,
-            _ => user => user.CreatedAt
+            "type" => user => user.Type,
+            _ => user => user.StaffCode
         };
     }
 }

@@ -8,7 +8,7 @@ namespace Group2.Application.Services.UserServices
     {
         Task<User?> FindUserByUserNameAsync(string email);
         Task<LoginResponse> LoginAsync(LoginDTO dto);
-        Task<UserResponse> GetByIdAsync(Guid id);
+        Task<UserResponse> GetByIdAsync(int id);
         Task<bool> ChangePasswordAsync(ChangePasswordDTO changePasswordDTO);
         Task<PaginationResponse<UserResponse>> GetFilterAsync(FilterRequest request);
     }

@@ -20,7 +20,7 @@ namespace Group2.Infrastructure.Repository
 
         }
 
-        public virtual async Task<TEntity?> GetByIdAsync(Guid id)
+        public virtual async Task<TEntity?> GetByIdAsync(int id)
         {
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             return await _table.FindAsync(id);

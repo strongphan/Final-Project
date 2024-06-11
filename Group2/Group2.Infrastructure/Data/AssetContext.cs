@@ -4,8 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Group2.Infrastructure.Data
 {
-    public class AssetContext(DbContextOptions options) : DbContext(options)
+    public class AssetContext : DbContext
     {
+
+        public AssetContext(DbContextOptions<AssetContext> options) : base(options) { }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Assignment> Assignments { get; set; }

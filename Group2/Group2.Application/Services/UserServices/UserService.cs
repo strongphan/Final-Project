@@ -20,7 +20,7 @@ namespace Group2.Application.Services.UserServices
             _tokenService = tokenService;
             _mapper = mapper;
         }
-        public async Task<UserResponse> GetByIdAsync(Guid id)
+        public async Task<UserResponse> GetByIdAsync(int id)
         {
             var entity = await _userRepo.GetByIdAsync(id) ?? throw new NotFoundException();
             var dto = _mapper.Map<UserResponse>(entity);
