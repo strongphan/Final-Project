@@ -1,33 +1,27 @@
-﻿using Backend.Domain.Enum;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Text.Json.Serialization;
+using Backend.Domain.Enum;
+using Backend.Application.Common.Converter;
+
 
 namespace Backend.Application.DTOs.AuthDTOs
 {
     public class UserDTO
     {
-        [Required]
-        [StringLength(maximumLength: 20)]
         public string FirstName { get; set; }
 
-        [Required]
-        [StringLength(maximumLength: 20)]
         public string LastName { get; set; }
 
-        [Required]
-        public DateTime DateOfBirth { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
+        public DateTime? DateOfBirth { get; set; }
 
-        [Required]
-        public DateTime JoinedDate { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
+        public DateTime? JoinedDate { get; set; }
 
-        [Required]
         public Gender Gender { get; set; }
 
-        [Required]
         public Role Type { get; set; }
 
-        [Required]
         public Location Location { get; set; }
-
-
+        
     }
 }
