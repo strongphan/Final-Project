@@ -1,11 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
+
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace Backend.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class inti : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,7 +46,7 @@ namespace Backend.Infrastructure.Migrations
                     JoinedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Location = table.Column<int>(type: "int", maxLength: 30, nullable: false),
                     FirstLogin = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -116,6 +119,18 @@ namespace Backend.Infrastructure.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DateOfBirth", "FirstLogin", "FirstName", "Gender", "IsDeleted", "JoinedDate", "LastName", "Location", "ModifiedAt", "ModifiedBy", "Password", "StaffCode", "Type", "UserName" },
+                values: new object[,]
+                {
+                    { 1, null, null, new DateTime(1985, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "John", 1, null, new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Doe", 1, null, null, "password123", "SD0001", 1, "john_d" },
+                    { 2, null, null, new DateTime(1990, 8, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Jane", 2, null, new DateTime(2019, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Smith", 0, null, null, "password456", "SD0002", 0, "jane_s" },
+                    { 3, null, null, new DateTime(1975, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Michael", 1, null, new DateTime(2018, 6, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Brown", 1, null, null, "password789", "SD0003", 1, "michael_b" },
+                    { 4, null, null, new DateTime(1988, 3, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Emily", 2, null, new DateTime(2021, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jones", 1, null, null, "password101", "SD0004", 0, "emily_j" },
+                    { 5, null, null, new DateTime(1995, 7, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "David", 1, null, new DateTime(2017, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "Williams", 0, null, null, "password202", "SD0005", 0, "david_w" }
                 });
 
             migrationBuilder.CreateIndex(

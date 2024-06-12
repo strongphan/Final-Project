@@ -13,7 +13,7 @@ namespace Backend.Domain.Exceptions
 
 
         #region Constructors
-        public ConflictException() : base(ResourceEN.Error_Conflict) { }
+        public ConflictException() : base(ResourceENG.Error_Conflict) { }
 
         public ConflictException(int errorCode)
         {

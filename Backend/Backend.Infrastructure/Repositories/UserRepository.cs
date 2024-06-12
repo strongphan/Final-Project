@@ -21,8 +21,7 @@ namespace Backend.Infrastructure.Repository
             string staffCode = $"SD{(maxId + 1).ToString("D4")}";
 
             // Generate Username
-            string baseUsername = $"{user.FirstName.ToLower()}{user.LastName.ToLower()[0]}";
-            string username = baseUsername;
+            string baseUsername = $"{user.FirstName.ToLower()}{string.Concat(user.LastName.ToLower().Split(' ').Select(w => w[0]))}"; string username = baseUsername;
             int usernameIndex = 1;
             while (await _context.Users.AnyAsync(s => s.UserName == username))
             {
@@ -30,8 +29,7 @@ namespace Backend.Infrastructure.Repository
             }
 
             // Generate Password
-            string password = $"{username}@{user.DateOfBirth:ddMMyyyy}";
-
+            string password = $"{char.ToUpper(username[0])}{username.Substring(1)}@{user.DateOfBirth:ddMMyyyy}";
             user.Password = password;
             user.UserName = username;
             user.StaffCode = staffCode;
