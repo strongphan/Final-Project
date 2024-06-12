@@ -12,7 +12,7 @@ const Layout = ({ children, title }) => { // Add a title prop
             <Header title={title} />
             <Box display="flex" paddingTop={2} paddingLeft={2}>
                 <Box>
-                    <VerticalNavbar/>
+                    <VerticalNavbar />
                 </Box>
                 <main>
                     {children}

@@ -6,6 +6,7 @@ using Backend.Application.DTOs.AuthDTOs;
 using Backend.Application.IRepositories;
 using Backend.Domain.Entity;
 using Backend.Domain.Exceptions;
+using FluentValidation;
 
 namespace Backend.Application.Services.UserServices
 {
@@ -14,12 +15,14 @@ namespace Backend.Application.Services.UserServices
         private readonly IUserRepository _userRepo;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
+        private readonly IValidator<UserDTO> _validator;
 
-        public UserService(IUserRepository userRepo, ITokenService tokenService, IMapper mapper)
+        public UserService(IUserRepository userRepo, ITokenService tokenService, IMapper mapper, IValidator<UserDTO> validator)
         {
             _userRepo = userRepo;
             _tokenService = tokenService;
             _mapper = mapper;
+            _validator = validator;
         }
         public async Task<UserResponse> GetByIdAsync(int id)
         {
@@ -30,13 +33,26 @@ namespace Backend.Application.Services.UserServices
         }
         public async Task<UserResponse> InsertAsync(UserDTO dto)
         {
-            var user = _mapper.Map<User>(dto);
-            user = await _userRepo.GenerateUserInformation(user);
-            await _userRepo.InsertAsync(user);
-            user = await FindUserByUserNameAsync(user.UserName);
-            var res = _mapper.Map<UserResponse>(user);
-            return res;
+            var validationResult = await _validator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
+                throw new DataInvalidException(string.Join(", ", errors));
+            }
 
+            try
+            {
+                var user = _mapper.Map<User>(dto);
+                user = await _userRepo.GenerateUserInformation(user);
+                await _userRepo.InsertAsync(user);
+                user = await FindUserByUserNameAsync(user.UserName);
+                var res = _mapper.Map<UserResponse>(user);
+                return res;
+            }
+            catch (Exception ex)
+            {
+                throw new DataInvalidException(ex.Message);
+            }
         }
         public async Task<bool> ChangePasswordAsync(ChangePasswordDTO changePasswordDTO)
         {
