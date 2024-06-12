@@ -1,105 +1,236 @@
-import React, { useState } from 'react';
-import { Container, Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, Select, MenuItem, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { Edit, Delete, Search } from '@mui/icons-material';
+// pages/ManageUserPage.js
+import { ArrowDownward, ArrowUpward, Delete, Edit } from '@mui/icons-material';
+import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Pagination, Paper, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
-import { useNavigate } from 'react-router-dom';
+import { Sheet } from '@mui/joy';
+import { Navigate, useNavigate } from 'react-router';
 
 const ManageUserPage = () => {
-    const [users, setUsers] = useState([
-        { staffCode: 'SD1901', fullName: 'An Nguyen Thuy', username: 'annt', joinedDate: '20/06/2019', type: 'Staff' },
-        { staffCode: 'SD1234', fullName: 'An Tran', username: 'antt', joinedDate: '15/07/2020', type: 'Staff' },
-    ]);
 
-    const [open, setOpen] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
 
     const navigate = useNavigate();
+    const users = [
+        //demo data
+        { staffCode: 'SD1901', fullName: 'An Nguyen Thuy', username: 'annt', joinedDate: '20/06/2019', type: 'Staff' },
+        { staffCode: 'SD1234', fullName: 'An Tran Van', username: 'antv', joinedDate: '09/04/2019', type: 'Staff' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+        { staffCode: 'SD0971', fullName: 'Binh Nguyen Van', username: 'binhnv', joinedDate: '08/03/2018', type: 'Admin' },
+    ];
 
-    const handleDelete = (user) => {
-        setSelectedUser(user);
-        setOpen(true);
+    useEffect(() => {
+        //load Api then set to state users above to get list users
+    }, [])
+
+    const [filterRequest, setFilterRequest] = useState({ searchTerm: '', sortColumn: '', sortOrder: '', page: 1, pageSize: '20' })
+
+    const [type, setType] = useState('All');
+
+    const handleSearchChange = (e) => {
+        setFilterRequest(prev => ({
+            ...prev,
+            searchTerm: e.target.value
+        }))
+    }
+
+    console.log('filter', filterRequest);
+    const handleTypeChange = (e) => {
+        setType(e.target.value)
+    }
+    const handlePageChange = (e, value) => {
+        setFilterRequest(prev => ({
+            ...prev,
+            page: value
+        }))
+    }
+
+    const handleHeaderClick = (e) => {
+        setFilterRequest((prev) => {
+            let newSortOrder;
+            if (prev.sortColumn === e) {
+                // Toggle the sort order
+                newSortOrder = prev.sortOrder === 'descend' ? 'asc' : prev.sortOrder === 'asc' ? '' : 'descend';
+            } else {
+                // Set to descending if switching columns
+                newSortOrder = '';
+            }
+            return {
+                ...prev,
+                sortColumn: e,
+                sortOrder: newSortOrder,
+            };
+        });
+    }
+
+    const getSortIcon = (column) => {
+        if (filterRequest.sortColumn === column) {
+            switch (filterRequest.sortOrder) {
+                case 'descend':
+                    return <ArrowDownward />;
+                case 'asc':
+                    return <ArrowUpward />;
+                default:
+                    return null;
+            }
+        }
+        return null;
     };
-
-    const confirmDelete = () => {
-        setUsers(users.filter(user => user !== selectedUser));
-        setOpen(false);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleCreateUser = () => {
-        navigate('/create-user');
-    };
-
     return (
-        <Layout title="> Manage User">
-            <Container  sx={{ mt: 4, p: 3 }}>
-                <Typography variant="h5" component="h2" style={{ color: '#f0001f', fontWeight: 'bold' }}>
-                    User List
-                </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                    <Select defaultValue="" sx={{ width: 150, height: '30px' }}>
-                        <MenuItem value="">Type</MenuItem>
-                        <MenuItem value="Staff">Staff</MenuItem>
-                        <MenuItem value="Admin">Admin</MenuItem>
-                    </Select>
-                    <TextField 
-                        placeholder="Search" 
-                        InputProps={{ endAdornment: <Search /> }} 
-                        sx={{ height: '25px' }} 
-                    />
-                    <Button 
-                        variant="contained" 
-                        onClick={handleCreateUser}
-                        sx={{ backgroundColor: '#ff0a2a', '&:hover': { backgroundColor: 'darkred' }, height: '50px' }}
-                    >
-                        Create new user
-                    </Button>
+        <Layout title=" -> Manage User">
+            <Paper elevation={3} style={{
+                padding: '20px', marginLeft: '100px', width: '1200px', height: 'calc(100vh - 150px)'
+            }}>
+                <h3 style={{ color: '#D6001C' }} >User List</h3>
+                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                    <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+                        <InputLabel>Type</InputLabel>
+                        <Select
+                            label="Type"
+                            value={type}
+                            name="type"
+                            onChange={handleTypeChange}>
+                            <MenuItem value="All">All</MenuItem>
+                            <MenuItem value="Admin">Admin</MenuItem>
+                            <MenuItem value="Staff">Staff</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <TextField
+                        variant="outlined"
+                        label="Search"
+                        value={filterRequest.searchTerm}
+                        name="search"
+                        onChange={handleSearchChange}
+                        sx={{ marginLeft: 'auto', marginRight: '20px' }} />
+                    <Button variant="contained" sx={{ backgroundColor: '#D6001C', height: '56px' }} onClick={() => navigate('/create-user')} >Create new user</Button>
                 </Box>
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Staff Code</TableCell>
-                                <TableCell>Full Name</TableCell>
-                                <TableCell>Username</TableCell>
-                                <TableCell>Joined Date</TableCell>
-                                <TableCell>Type</TableCell>
-                                <TableCell>Actions</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {users.map((user) => (
-                                <TableRow key={user.staffCode}>
-                                    <TableCell>{user.staffCode}</TableCell>
-                                    <TableCell>{user.fullName}</TableCell>
-                                    <TableCell>{user.username}</TableCell>
-                                    <TableCell>{user.joinedDate}</TableCell>
-                                    <TableCell>{user.type}</TableCell>
-                                    <TableCell>
-                                        <IconButton color="primary"><Edit /></IconButton>
-                                        <IconButton color="secondary" onClick={() => handleDelete(user)}><Delete /></IconButton>
+                <TableContainer component={Paper} >
+                    <Sheet sx={{ height: 565, overflow: 'auto' }}>
+                        <Table >
+                            <TableHead sx={{ fontWeight: 'bold', position: 'sticky', top: 0, zIndex: 1, backgroundColor: 'white' }}>
+                                <TableRow >
+                                    <TableCell >
+                                        <Button
+                                            variant="text"
+                                            onClick={() => handleHeaderClick('staffCode')}
+                                            endIcon={getSortIcon('staffCode')}
+                                            sx={{ fontWeight: 'bold', textTransform: 'none', padding: 0, minWidth: 'auto', color: 'black' }}
+                                        >
+                                            Staff Code
+                                        </Button>
                                     </TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="text"
+                                            onClick={() => handleHeaderClick('fullName')}
+                                            endIcon={getSortIcon('fullName')}
+                                            sx={{ fontWeight: 'bold', textTransform: 'none', padding: 0, minWidth: 'auto', color: 'black' }}
+                                        >
+                                            Full Name
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="text"
+                                            onClick={() => handleHeaderClick('username')}
+                                            endIcon={getSortIcon('username')}
+                                            sx={{ fontWeight: 'bold', textTransform: 'none', padding: 0, minWidth: 'auto', color: 'black' }}
+                                        >
+                                            Username
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="text"
+                                            onClick={() => handleHeaderClick('joinedDate')}
+                                            endIcon={getSortIcon('joinedDate')}
+                                            sx={{ fontWeight: 'bold', textTransform: 'none', padding: 0, minWidth: 'auto', color: 'black' }}
+                                        >
+                                            Joined Date
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="text"
+                                            onClick={() => handleHeaderClick('')}
+                                            sx={{ fontWeight: 'bold', textTransform: 'none', padding: 0, minWidth: 'auto', color: 'black' }}
+                                        >
+                                            Type
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="text"
+                                            onClick={() => handleHeaderClick('action')}
+                                            endIcon={getSortIcon('action')}
+                                            sx={{ fontWeight: 'bold', textTransform: 'none', padding: 0, minWidth: 'auto', color: 'black' }}
+                                        >
+                                            Actions
+                                        </Button>
+                                    </TableCell>
+
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHead>
+                            <TableBody>
+                                {users.map((user, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{user.staffCode}</TableCell>
+                                        <TableCell>{user.fullName}</TableCell>
+                                        <TableCell>{user.username}</TableCell>
+                                        <TableCell>{user.joinedDate}</TableCell>
+                                        <TableCell>{user.type}</TableCell>
+                                        <TableCell>
+                                            <IconButton color="primary">
+                                                <Edit />
+                                            </IconButton>
+                                            <IconButton color="secondary">
+                                                <Delete />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </Sheet>
                 </TableContainer>
-                <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Are you sure?</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Do you want to disable this user?
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">Cancel</Button>
-                        <Button onClick={confirmDelete} color="secondary">Disable</Button>
-                    </DialogActions>
-                </Dialog>
-            </Container>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '10px' }}>
+                    <Pagination
+                        count={10}
+                        variant="outlined"
+                        shape="rounded"
+                        page={filterRequest.page}
+                        onChange={handlePageChange}
+                        sx={{
+                            '& .MuiPaginationItem-root': {
+                                color: 'red',
+                            },
+                            '& .Mui-selected': {
+                                backgroundColor: '#D6001C',
+                                color: 'white',
+                            },
+                        }} />
+                </Box>
+            </Paper>
         </Layout>
     );
 };
