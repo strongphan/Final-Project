@@ -10,7 +10,7 @@ namespace Backend.Domain.Exceptions
         #endregion
 
         #region Constructors
-        public NotFoundException() : base(ResourceEN.Error_NotFound) { }
+        public NotFoundException() : base(ResourceENG.Error_NotFound) { }
 
         public NotFoundException(int errorCode)
         {

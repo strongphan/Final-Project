@@ -40,6 +40,12 @@ namespace Backend.API.Controllers
             var res = await _userService.GetFilterAsync(request);
             return Ok(res);
         }
+        [HttpPost]
+        public async Task<IActionResult> InsertAsync(UserDTO dto)
+        {
+            var res = await _userService.InsertAsync(dto);
+            return Ok(res);
+        }
     }
 
 }

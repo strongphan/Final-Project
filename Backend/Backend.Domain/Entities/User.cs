@@ -29,7 +29,7 @@ namespace Backend.Domain.Entity
         public Role Type { get; set; }
 
         [StringLength(maximumLength: 30)]
-        public string Location { get; set; }
+        public Location Location { get; set; }
         public bool FirstLogin { get; set; } = true;
     }
 }

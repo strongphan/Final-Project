@@ -198,10 +198,9 @@ namespace Backend.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
+                    b.Property<int>("Location")
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
@@ -237,6 +236,83 @@ namespace Backend.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DateOfBirth = new DateTime(1985, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstLogin = true,
+                            FirstName = "John",
+                            Gender = 1,
+                            JoinedDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastName = "Doe",
+                            Location = 1,
+                            Password = "password123",
+                            StaffCode = "SD0001",
+                            Type = 1,
+                            UserName = "john_d"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DateOfBirth = new DateTime(1990, 8, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstLogin = true,
+                            FirstName = "Jane",
+                            Gender = 2,
+                            JoinedDate = new DateTime(2019, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastName = "Smith",
+                            Location = 0,
+                            Password = "password456",
+                            StaffCode = "SD0002",
+                            Type = 0,
+                            UserName = "jane_s"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DateOfBirth = new DateTime(1975, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstLogin = true,
+                            FirstName = "Michael",
+                            Gender = 1,
+                            JoinedDate = new DateTime(2018, 6, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastName = "Brown",
+                            Location = 1,
+                            Password = "password789",
+                            StaffCode = "SD0003",
+                            Type = 1,
+                            UserName = "michael_b"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DateOfBirth = new DateTime(1988, 3, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstLogin = true,
+                            FirstName = "Emily",
+                            Gender = 2,
+                            JoinedDate = new DateTime(2021, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastName = "Jones",
+                            Location = 1,
+                            Password = "password101",
+                            StaffCode = "SD0004",
+                            Type = 0,
+                            UserName = "emily_j"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DateOfBirth = new DateTime(1995, 7, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstLogin = true,
+                            FirstName = "David",
+                            Gender = 1,
+                            JoinedDate = new DateTime(2017, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastName = "Williams",
+                            Location = 0,
+                            Password = "password202",
+                            StaffCode = "SD0005",
+                            Type = 0,
+                            UserName = "david_w"
+                        });
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Asset", b =>

@@ -22,14 +22,14 @@ namespace Backend.Domain.Resource {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ResourceEN {
+    public class ResourceENG {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ResourceEN() {
+        internal ResourceENG() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Backend.Domain.Resource {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ManhPT_MidAssignment.Domain.Resource.ResourceEN", typeof(ResourceEN).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Backend.Domain.Resource.ResourceENG", typeof(ResourceENG).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
