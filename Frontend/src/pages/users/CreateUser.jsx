@@ -127,6 +127,7 @@ const CreateUser = () => {
               </Grid>
               <Grid item xs={7}>
                 <TextField
+                  onBlur={handleChange}
                   fullWidth
                   name="firstName"
                   value={user.firstName}
@@ -150,6 +151,7 @@ const CreateUser = () => {
                   fullWidth
                   name="lastName"
                   value={user.lastName}
+                  onBlur={handleChange}
                   onChange={handleChange}
                   margin="dense"
                   required
@@ -183,11 +185,7 @@ const CreateUser = () => {
                     )}
                   />
                 </LocalizationProvider>
-                {formErrors.dateOfBirth && (
-                  <FormHelperText error>
-                    Date of birth is required!
-                  </FormHelperText>
-                )}
+
                 {formErrors.dateOfBirth && (
                   <FormHelperText error>
                     User must be at least 18 years old!
