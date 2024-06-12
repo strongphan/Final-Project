@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Radio,
@@ -22,7 +22,6 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
-import { useEffect } from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 
 const CreateUser = () => {
@@ -30,9 +29,9 @@ const CreateUser = () => {
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
-    dateOfBirth: "",
+    dateOfBirth: null,
     gender: "female",
-    joinedDate: "",
+    joinedDate: null,
     type: "",
     location: "",
   });
@@ -47,6 +46,11 @@ const CreateUser = () => {
     location: false,
   });
 
+  const [touched, setTouched] = useState({
+    dateOfBirth: false,
+    joinedDate: false,
+  });
+
   const formatDate = (date) => {
     return date ? format(new Date(date), "dd/MM/yyyy") : "";
   };
@@ -59,8 +63,9 @@ const CreateUser = () => {
 
   const handleDateChange = (name, date) => {
     setUser({ ...user, [name]: date });
+    setTouched({ ...touched, [name]: true });
   };
-
+  
   useEffect(() => {
     if (user.dateOfBirth && user.joinedDate) {
       const dob = new Date(user.dateOfBirth);
@@ -78,6 +83,12 @@ const CreateUser = () => {
       } else {
         setFormErrors((prevErrors) => ({ ...prevErrors, joinedDate: false }));
       }
+    } else {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        dateOfBirth: !user.dateOfBirth,
+        joinedDate: !user.joinedDate,
+      }));
     }
   }, [user.dateOfBirth, user.joinedDate]);
 
@@ -127,18 +138,15 @@ const CreateUser = () => {
               </Grid>
               <Grid item xs={7}>
                 <TextField
+                  placeholder="First Name"
                   onBlur={handleChange}
                   fullWidth
                   name="firstName"
                   value={user.firstName}
                   onChange={handleChange}
                   margin="dense"
-                  required
                   error={formErrors.firstName}
                 />
-                {formErrors.firstName && (
-                  <FormHelperText error>First name is required!</FormHelperText>
-                )}
               </Grid>
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
@@ -148,6 +156,7 @@ const CreateUser = () => {
               </Grid>
               <Grid item xs={7}>
                 <TextField
+                  placeholder="Last Name"
                   fullWidth
                   name="lastName"
                   value={user.lastName}
@@ -157,9 +166,6 @@ const CreateUser = () => {
                   required
                   error={formErrors.lastName}
                 />
-                {formErrors.lastName && (
-                  <FormHelperText error>Last name is required!</FormHelperText>
-                )}
               </Grid>
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
@@ -179,16 +185,17 @@ const CreateUser = () => {
                         {...params}
                         fullWidth
                         margin="dense"
-                        required
-                        error={formErrors.dateOfBirth}
+                        error={formErrors.dateOfBirth && touched.dateOfBirth}
                       />
                     )}
                   />
                 </LocalizationProvider>
 
-                {formErrors.dateOfBirth && (
+                {formErrors.dateOfBirth && touched.dateOfBirth && (
                   <FormHelperText error>
-                    User must be at least 18 years old!
+                    {user.dateOfBirth
+                      ? "User must be at least 18 years old!"
+                      : "Date of Birth is required!"}
                   </FormHelperText>
                 )}
               </Grid>
@@ -250,19 +257,16 @@ const CreateUser = () => {
                         fullWidth
                         margin="dense"
                         required
-                        error={formErrors.joinedDate}
+                        error={formErrors.joinedDate && touched.joinedDate}
                       />
                     )}
                   />
                 </LocalizationProvider>
-                {formErrors.joinedDate && (
+                {formErrors.joinedDate && touched.joinedDate && (
                   <FormHelperText error>
-                    {formErrors.joinedDate &&
-                    user.joinedDate &&
-                    user.dateOfBirth &&
-                    new Date(user.joinedDate) < new Date(user.dateOfBirth)
+                    {user.joinedDate
                       ? "Joined date must be greater than Date of Birth!"
-                      : "Joined date is required!"}
+                      : "Joined Date is required!"}
                   </FormHelperText>
                 )}
               </Grid>
