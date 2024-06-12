@@ -154,11 +154,11 @@ namespace Backend.Tests.ServiceTests
             var userResponses = new List<UserResponse> { new UserResponse { Id = 1, UserName = "user1" } };
             var paginationResponse = new PaginationResponse<User>(users, 1);
 
-            _userRepoMock.Setup(repo => repo.GetFilterAsync(It.IsAny<FilterRequest>())).ReturnsAsync(paginationResponse);
+            _userRepoMock.Setup(repo => repo.GetFilterAsync(It.IsAny<UserFilterRequest>())).ReturnsAsync(paginationResponse);
             _mapperMock.Setup(mapper => mapper.Map<IEnumerable<UserResponse>>(users)).Returns(userResponses);
 
             // Act
-            var result = await _userService.GetFilterAsync(new FilterRequest());
+            var result = await _userService.GetFilterAsync(new UserFilterRequest());
 
             // Assert
             Assert.That(result.TotalCount, Is.EqualTo(1));
