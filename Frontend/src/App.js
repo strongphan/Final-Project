@@ -7,6 +7,7 @@ import ManageAssetPage from './pages/ManageAssetPage';
 import ManageAssignmentPage from './pages/ManageAssignmentPage';
 import RequestForReturningPage from './pages/RequestForReturningPage';
 import ReportPage from './pages/ReportPage';
+import CreateUser from './pages/users/CreateUser';
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/" element={<HomePage></HomePage>} />
                 <Route path="/login" element={<LoginPage></LoginPage>} />
                 <Route path="/manage-user" element={<ManageUserPage></ManageUserPage>} />
+                <Route path="/create-user" element={<CreateUser></CreateUser>} />
                 <Route path="/manage-asset" element={<ManageAssetPage></ManageAssetPage>} />
                 <Route path="/manage-assignment" element={<ManageAssignmentPage></ManageAssignmentPage>} />
                 <Route path="/request-for-returning" element={<RequestForReturningPage></RequestForReturningPage>} />
