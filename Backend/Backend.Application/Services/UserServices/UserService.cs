@@ -78,7 +78,7 @@ namespace Backend.Application.Services.UserServices
 
             if (dto.Password == getUser.Password)
             {
-                return new LoginResponse(true, "Login success", _tokenService.GenerateJWT(getUser));
+                return new LoginResponse(true, "Login success", _tokenService.GenerateJWTWithUser(getUser));
 
             }
             else

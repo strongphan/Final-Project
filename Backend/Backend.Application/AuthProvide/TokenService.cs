@@ -47,7 +47,7 @@ namespace Backend.Application.AuthProvide
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public string GenerateJWT(User user, IEnumerable<Claim>? additionalClaims = null)
+        public string GenerateJWTWithUser(User user, IEnumerable<Claim>? additionalClaims = null)
         {
             var claims = new List<Claim>
                 {

@@ -6,6 +6,6 @@ namespace Backend.Application.AuthProvide
     public interface ITokenService
     {
         string GenerateJWT(IEnumerable<Claim>? additionalClaims = null);
-        string GenerateJWT(User user, IEnumerable<Claim>? additionalClaims = null);
+        string GenerateJWTWithUser(User user, IEnumerable<Claim>? additionalClaims = null);
     }
 }
