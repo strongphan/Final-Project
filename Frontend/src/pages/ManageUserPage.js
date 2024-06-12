@@ -4,9 +4,12 @@ import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Pagination,
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import { Sheet } from '@mui/joy';
+import { Navigate, useNavigate } from 'react-router';
 
 const ManageUserPage = () => {
 
+
+    const navigate = useNavigate();
     const users = [
         //demo data
         { staffCode: 'SD1901', fullName: 'An Nguyen Thuy', username: 'annt', joinedDate: '20/06/2019', type: 'Staff' },
@@ -119,7 +122,7 @@ const ManageUserPage = () => {
                         name="search"
                         onChange={handleSearchChange}
                         sx={{ marginLeft: 'auto', marginRight: '20px' }} />
-                    <Button variant="contained" sx={{ backgroundColor: '#D6001C', height: '56px' }} >Create new user</Button>
+                    <Button variant="contained" sx={{ backgroundColor: '#D6001C', height: '56px' }} onClick={() => navigate('/create-user')} >Create new user</Button>
                 </Box>
                 <TableContainer component={Paper} >
                     <Sheet sx={{ height: 565, overflow: 'auto' }}>
