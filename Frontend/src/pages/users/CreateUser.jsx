@@ -1,29 +1,27 @@
-import React, { useState } from "react";
 import {
-  TextField,
+  Box,
+  Button,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  Grid,
+  InputLabel,
+  MenuItem,
   Radio,
   RadioGroup,
-  FormControlLabel,
-  Button,
-  MenuItem,
   Select,
-  InputLabel,
-  FormControl,
-  Container,
+  TextField,
   Typography,
-  Box,
-  Grid,
-  FormHelperText,
 } from "@mui/material";
-import Layout from "../../components/Layout";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { DatePicker } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import axios from "axios";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
-import { useEffect } from "react";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CreateUser = () => {
   const navigate = useNavigate();
@@ -103,7 +101,7 @@ const CreateUser = () => {
   };
 
   return (
-    <Layout title="Manage User > Create New User">
+    <>
       <Container sx={{ display: "flex", justifyContent: "center", my: 4 }}>
         <Box sx={{ width: "60%", borderRadius: 1, p: 1 }}>
           <Typography
@@ -258,9 +256,9 @@ const CreateUser = () => {
                 {formErrors.joinedDate && (
                   <FormHelperText error>
                     {formErrors.joinedDate &&
-                    user.joinedDate &&
-                    user.dateOfBirth &&
-                    new Date(user.joinedDate) < new Date(user.dateOfBirth)
+                      user.joinedDate &&
+                      user.dateOfBirth &&
+                      new Date(user.joinedDate) < new Date(user.dateOfBirth)
                       ? "Joined date must be greater than Date of Birth!"
                       : "Joined date is required!"}
                   </FormHelperText>
@@ -363,7 +361,7 @@ const CreateUser = () => {
           </form>
         </Box>
       </Container>
-    </Layout>
+    </>
   );
 };
 
