@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Backend.Application.AuthProvide;
+using Backend.Application.Common;
 using Backend.Application.Common.Paging;
 using Backend.Application.DTOs.AuthDTOs;
 using Backend.Application.IRepositories;
@@ -27,29 +28,45 @@ namespace Backend.Application.Services.UserServices
             return dto;
 
         }
+        public async Task<UserResponse> InsertAsync(UserDTO dto)
+        {
+            var user = _mapper.Map<User>(dto);
+            user = await _userRepo.GenerateUserInformation(user);
+            await _userRepo.InsertAsync(user);
+            user = await FindUserByUserNameAsync(user.UserName);
+            var res = _mapper.Map<UserResponse>(user);
+            return res;
+
+        }
         public async Task<bool> ChangePasswordAsync(ChangePasswordDTO changePasswordDTO)
         {
             var user = await _userRepo.GetByIdAsync(changePasswordDTO.Id) ?? throw new NotFoundException();
-            bool checkPassword = BCrypt.Net.BCrypt.Verify(changePasswordDTO.OldPassword, user.Password);
-            if (checkPassword)
+            if (changePasswordDTO.OldPassword != user.Password)
             {
                 throw new DataInvalidException("Wrong password");
             }
+            if (changePasswordDTO.NewPassword == user.Password)
             {
-                user.Password = BCrypt.Net.BCrypt.HashPassword(changePasswordDTO.NewPassword);
-                user.ModifiedAt = DateTime.UtcNow;
-                user.ModifiedBy = user.FirstName;
-                try
-                {
-                    await _userRepo.UpdateAsync(user);
-
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
-                return true;
+                throw new DataInvalidException("Do not re-enter the old password");
             }
+            var check = new PasswordRegex();
+            if (!check.IsPasswordValid(changePasswordDTO.NewPassword))
+                throw new DataInvalidException("The password having at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 symbol");
+
+            user.Password = changePasswordDTO.NewPassword;
+            user.ModifiedAt = DateTime.UtcNow;
+            user.ModifiedBy = user.FirstName;
+            user.FirstLogin = false;
+            try
+            {
+                await _userRepo.UpdateAsync(user);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return true;
         }
         public async Task<User?> FindUserByUserNameAsync(string email) => await _userRepo.FindUserByUserNameAsync(email);
 
@@ -59,8 +76,7 @@ namespace Backend.Application.Services.UserServices
             if (getUser == null)
                 return new LoginResponse(false, "User not found");
 
-            bool checkPassword = BCrypt.Net.BCrypt.Verify(dto.Password, getUser.Password);
-            if (checkPassword)
+            if (dto.Password == getUser.Password)
             {
                 return new LoginResponse(true, "Login success", _tokenService.GenerateJWT(getUser));
 

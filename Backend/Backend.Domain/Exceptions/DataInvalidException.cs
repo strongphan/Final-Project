@@ -13,7 +13,7 @@ namespace Backend.Domain.Exceptions
         #endregion
 
         #region Constructors
-        public DataInvalidException() : base(ResourceEN.Error_ValidateData) { }
+        public DataInvalidException() : base(ResourceENG.Error_ValidateData) { }
 
         public DataInvalidException(int errorCode)
         {

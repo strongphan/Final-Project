@@ -25,6 +25,9 @@ namespace Backend.Application.DTOs.AuthDTOs
         [Required]
         public Role Type { get; set; }
 
+        [Required]
+        public Location Location { get; set; }
+
 
     }
 }

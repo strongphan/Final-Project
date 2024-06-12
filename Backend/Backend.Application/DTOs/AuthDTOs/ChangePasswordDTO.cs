@@ -9,7 +9,7 @@ namespace Backend.Application.DTOs.AuthDTOs
         [Required]
         public string? OldPassword { get; set; } = string.Empty;
         [Required]
-        public string? NewPassword { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
 
         [Required, Compare(nameof(NewPassword))]
         public string? ConfirmPassword { get; set; } = string.Empty;

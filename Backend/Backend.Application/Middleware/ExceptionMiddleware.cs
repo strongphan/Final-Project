@@ -47,7 +47,7 @@ namespace Backend.Application.Middleware
 
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex, ResourceEN.Error_Exception, StatusCodes.Status500InternalServerError);
+                await HandleExceptionAsync(context, ex, ResourceENG.Error_Exception, StatusCodes.Status500InternalServerError);
             }
         }
 

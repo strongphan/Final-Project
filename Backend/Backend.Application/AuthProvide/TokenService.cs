@@ -51,9 +51,11 @@ namespace Backend.Application.AuthProvide
         {
             var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                     new Claim(ClaimTypes.Locality, user.Location),
-                    new Claim(ClaimTypes.Role, user.Type.ToString()),
+                    new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                     new(ClaimTypes.Name, user.UserName),
+                     new(ClaimTypes.Locality, user.Location.ToString()),
+                     new("FirstLogin", user.FirstLogin.ToString()),
+                    new(ClaimTypes.Role, user.Type.ToString()),
                 };
             if (additionalClaims?.Any() == true)
                 claims.AddRange(additionalClaims!);
