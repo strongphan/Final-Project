@@ -1,7 +1,6 @@
 // pages/ReportPage.js
-import React from 'react';
-import Layout from '../components/Layout';
 import { Typography } from '@mui/material';
+import React from 'react';
 
 const ReportPage = () => {
     return (
@@ -10,7 +9,7 @@ const ReportPage = () => {
                 Report
             </Typography>
             <p>This is the Report page.</p>
-        </Layout>
+        </>
     );
 };
 

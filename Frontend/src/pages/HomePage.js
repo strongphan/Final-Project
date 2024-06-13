@@ -1,7 +1,6 @@
-// HomePage.js
+// pages/HomePage.js
+import { Box, Paper, Typography } from '@mui/material';
 import React from 'react';
-import { Box, Typography, Paper } from '@mui/material';
-import Layout from '../components/Layout';
 
 const HomePage = () => {
     return (

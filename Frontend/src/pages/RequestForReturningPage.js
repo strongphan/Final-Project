@@ -1,7 +1,6 @@
 // pages/RequestForReturningPage.js
-import React from 'react';
-import Layout from '../components/Layout';
 import { Typography } from '@mui/material';
+import React from 'react';
 
 const RequestForReturningPage = () => {
     return (
@@ -10,7 +9,7 @@ const RequestForReturningPage = () => {
                 Request for Returning
             </Typography>
             <p>This is the Request for Returning page.</p>
-        </Layout>
+        </>
     );
 };
 

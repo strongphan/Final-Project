@@ -1,7 +1,6 @@
 // pages/ManageAssignmentPage.js
-import React from 'react';
-import Layout from '../components/Layout';
 import { Typography } from '@mui/material';
+import React from 'react';
 
 const ManageAssignmentPage = () => {
     return (
@@ -10,7 +9,7 @@ const ManageAssignmentPage = () => {
                 Manage Assignment
             </Typography>
             <p>This is the Manage Assignment page.</p>
-        </Layout>
+        </>
     );
 };
 

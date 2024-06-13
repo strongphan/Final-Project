@@ -9,6 +9,7 @@ import ManageAssignmentPage from './pages/ManageAssignmentPage';
 import RequestForReturningPage from './pages/RequestForReturningPage';
 import ReportPage from './pages/ReportPage';
 import CreateUser from './pages/users/CreateUser';
+import Layout from './components/Layout';
 
 function App() {
     return (
