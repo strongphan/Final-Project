@@ -4,8 +4,8 @@ import { jwtDecode } from "jwt-decode";
 const AuthContext = createContext({
   isAuthenticated: false,
   setIsAuthenticated: () => {},
-  user: { name: "", id: "", role: "", locality: "" },
-  setUser: () => {},
+  currentUser: { name: "", id: "", role: "", locality: "" },
+  setCurrentUser: () => {},
 });
 
 export const useAuthContext = () => useContext(AuthContext);

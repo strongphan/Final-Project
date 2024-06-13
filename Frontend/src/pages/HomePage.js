@@ -1,22 +1,24 @@
-// pages/HomePage.js
+// HomePage.js
 import React from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import Layout from '../components/Layout';
 
 const HomePage = () => {
-    // console.log(localStorage.getItem('token'));
     return (
         <Layout>
-            <Paper elevation={3} sx={{  p: 3, mt: 3, mb: 3 }}>
+            <Paper elevation={3} sx={{ p: 3, mt: 3, mb: 3 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <Typography variant="h2" gutterBottom sx={{ fontWeight: 'bold', mt: 3 }}>
-                        Welcome to the Asset Management System
+                    <Typography variant="h2" gutterBottom sx={{ color: '#D6001C', fontWeight: 'bold', mt: 3 }}>
+                        Welcome to the <br />Asset Management System
                     </Typography>
                     <Typography variant="h6" sx={{ mt: 2 }}>
-                        Manage your assets efficiently and effectively with our intuitive and user-friendly interface.
+                        Experience the power of efficient and effective asset management with our state-of-the-art, user-friendly interface.
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 2 }}>
-                        Our system provides a comprehensive solution for tracking and managing your assets. With real-time data and insightful analytics, you can make informed decisions to optimize your asset utilization and performance.
+                        Our system is designed to provide a comprehensive solution for tracking and managing your assets. Leveraging real-time data and insightful analytics, we empower you to make informed decisions that optimize your asset utilization and performance. Experience the difference with our robust and reliable asset management platform.
+                    </Typography>
+                    <Typography variant="body1" sx={{ mt: 2 }}>
+                        Join the ranks of our satisfied customers who trust us for their asset management needs. Let's redefine asset management together.
                     </Typography>
                 </Box>
             </Paper>

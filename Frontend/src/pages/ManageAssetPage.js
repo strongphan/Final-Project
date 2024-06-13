@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 
 const ManageAssetPage = () => {
     return (
-        <Layout title="-> Manage Asset">
+        <Layout title=" > Manage Asset">
             <Typography variant="h5" component="h2" style={{ color: '#D6001C', fontWeight: 'bold' }}>
                 Manage Asset
             </Typography>
