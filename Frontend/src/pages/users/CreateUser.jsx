@@ -1,29 +1,28 @@
-import React, { useState, useEffect } from "react";
 import {
-  TextField,
+  Box,
+  Button,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  Grid,
+  InputLabel,
+  MenuItem,
   Radio,
   RadioGroup,
-  FormControlLabel,
-  Button,
-  MenuItem,
   Select,
-  InputLabel,
-  FormControl,
-  Container,
+  TextField,
   Typography,
-  Box,
-  Grid,
-  FormHelperText,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { DatePicker } from "@mui/x-date-pickers";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { vi } from "date-fns/locale";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-import { useAuthContext } from "../../context/AuthContext";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import axios from "axios";
 import { format } from "date-fns";
-import { flushSync } from "react-dom";
+import { vi } from "date-fns/locale";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../context/AuthContext";
 
 const CreateUser = () => {
   const navigate = useNavigate();
@@ -181,19 +180,25 @@ const CreateUser = () => {
               color: "#d32f2f",
               fontWeight: "bold",
               fontSize: "20px",
-            }}
-          >
+            }}>
             Create New User
           </Typography>
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={1}>
-              <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
+            <Grid
+              container
+              spacing={1}>
+              <Grid
+                item
+                xs={3}
+                sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
                   First Name
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
                 </Typography>
               </Grid>
-              <Grid item xs={9}>
+              <Grid
+                item
+                xs={9}>
                 <TextField
                   placeholder="First Name"
                   onBlur={handleChange}
@@ -208,13 +213,18 @@ const CreateUser = () => {
                   <FormHelperText error>{formErrors.firstName}</FormHelperText>
                 )}
               </Grid>
-              <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
+              <Grid
+                item
+                xs={3}
+                sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
                   Last Name
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
                 </Typography>
               </Grid>
-              <Grid item xs={9}>
+              <Grid
+                item
+                xs={9}>
                 <TextField
                   placeholder="Last Name"
                   fullWidth
@@ -230,14 +240,21 @@ const CreateUser = () => {
                   <FormHelperText error>{formErrors.lastName}</FormHelperText>
                 )}
               </Grid>
-              <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
+              <Grid
+                item
+                xs={3}
+                sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
                   Date of Birth
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
                 </Typography>
               </Grid>
-              <Grid item xs={9}>
-                <LocalizationProvider dateAdapter={AdapterDateFns} locale={vi}>
+              <Grid
+                item
+                xs={9}>
+                <LocalizationProvider
+                  dateAdapter={AdapterDateFns}
+                  locale={vi}>
                   <DatePicker
                     format="dd/MM/yyyy"
                     label="Date Of Birth"
@@ -262,19 +279,23 @@ const CreateUser = () => {
                   </FormHelperText>
                 )}
               </Grid>
-              <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
+              <Grid
+                item
+                xs={3}
+                sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
                   Gender
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
                 </Typography>
               </Grid>
-              <Grid item xs={9}>
+              <Grid
+                item
+                xs={9}>
                 <RadioGroup
                   name="gender"
                   value={users.gender}
                   onChange={handleTypeChange}
-                  row
-                >
+                  row>
                   <FormControlLabel
                     value={1}
                     control={
@@ -301,14 +322,21 @@ const CreateUser = () => {
                   />
                 </RadioGroup>
               </Grid>
-              <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
+              <Grid
+                item
+                xs={3}
+                sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
                   Joined Date
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
                 </Typography>
               </Grid>
-              <Grid item xs={9}>
-                <LocalizationProvider dateAdapter={AdapterDateFns} locale={vi}>
+              <Grid
+                item
+                xs={9}>
+                <LocalizationProvider
+                  dateAdapter={AdapterDateFns}
+                  locale={vi}>
                   <DatePicker
                     format="dd/MM/yyyy"
                     label="Joined Date"
@@ -333,27 +361,30 @@ const CreateUser = () => {
                   </FormHelperText>
                 )}
               </Grid>
-              <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
+              <Grid
+                item
+                xs={3}
+                sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
                   Type
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
                 </Typography>
               </Grid>
-              <Grid item xs={9}>
+              <Grid
+                item
+                xs={9}>
                 <FormControl
                   fullWidth
                   margin="dense"
                   required
-                  error={formErrors.type}
-                >
+                  error={formErrors.type}>
                   <InputLabel id="type-label">Type</InputLabel>
                   <Select
                     labelId="type-label"
                     name="type"
                     value={users.type}
                     onChange={handleTypeChange}
-                    label="Type"
-                  >
+                    label="Type">
                     <MenuItem value={1}>Admin</MenuItem>
                     <MenuItem value={0}>Staff</MenuItem>
                   </Select>
@@ -369,8 +400,7 @@ const CreateUser = () => {
                 sx={{
                   display: users.type === 1 ? "flex" : "none",
                   alignItems: "center",
-                }}
-              >
+                }}>
                 <Typography>
                   Location
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
@@ -379,22 +409,19 @@ const CreateUser = () => {
               <Grid
                 item
                 xs={9}
-                sx={{ display: users.type === 1 ? "block" : "none" }}
-              >
+                sx={{ display: users.type === 1 ? "block" : "none" }}>
                 <FormControl
                   fullWidth
                   margin="dense"
                   required
-                  error={formErrors.location}
-                >
+                  error={formErrors.location}>
                   <InputLabel id="location-label">Location</InputLabel>
                   <Select
                     labelId="location-label"
                     name="location"
                     value={users.location}
                     onChange={handleChange}
-                    label="Location"
-                  >
+                    label="Location">
                     <MenuItem value="hanoi">Ha Noi</MenuItem>
                     <MenuItem value="hochiminh">Ho Chi Minh</MenuItem>
                   </Select>
@@ -404,24 +431,23 @@ const CreateUser = () => {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid
+                item
+                xs={12}>
                 <Box
-                  sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}
-                >
+                  sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
                   <Button
                     variant="contained"
                     type="submit"
                     sx={{ backgroundColor: "#d32f2f", mr: 3 }}
                     disabled={Object.values(formErrors).some((error) => error)}
-                    onClick={handleSubmit}
-                  >
+                    onClick={handleSubmit}>
                     Save
                   </Button>
                   <Button
                     variant="outlined"
                     color="secondary"
-                    onClick={() => navigate("/manage-user")}
-                  >
+                    onClick={() => navigate("/manage-user")}>
                     Cancel
                   </Button>
                 </Box>
