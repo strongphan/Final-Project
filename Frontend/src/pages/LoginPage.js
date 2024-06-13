@@ -116,15 +116,12 @@ const LoginPage = () => {
 
   const handlePasswordChange = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:5224/api/users/change_password",
-        {
-          id: userId,
-          oldPassword: password, // Use the current password for the old password
-          newPassword: newPassword,
-          confirmPassword: confirmPassword,
-        }
-      );
+      await axios.post("http://localhost:5224/api/users/change_password", {
+        id: userId,
+        oldPassword: password, // Use the current password for the old password
+        newPassword: newPassword,
+        confirmPassword: confirmPassword,
+      });
 
       // Handle success or failure of password change
     } catch (error) {
