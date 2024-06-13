@@ -13,7 +13,7 @@ export const useAuthContext = () => useContext(AuthContext);
 const AuthProvider = ({ children }) => {
   const token = localStorage.getItem("token");
   const [isAuthenticated, setIsAuthenticated] = useState(!!token);
-  const [user, setUser] = useState({
+  const [currentUser, setCurrentUser] = useState({
     name: "",
     id: "",
     role: "",
@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
       if (token) {
         try {
           const decodedToken = jwtDecode(token);
-          setUser({
+          setCurrentUser({
             name: decodedToken[
               "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
             ],
@@ -51,7 +51,12 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, user, setUser }}
+      value={{
+        isAuthenticated,
+        setIsAuthenticated,
+        currentUser,
+        setCurrentUser,
+      }}
     >
       {children}
     </AuthContext.Provider>
