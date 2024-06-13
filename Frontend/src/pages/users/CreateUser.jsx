@@ -65,7 +65,7 @@ const CreateUser = () => {
     setUser({ ...user, [name]: date });
     setTouched({ ...touched, [name]: true });
   };
-  
+
   useEffect(() => {
     if (user.dateOfBirth && user.joinedDate) {
       const dob = new Date(user.dateOfBirth);
@@ -94,6 +94,7 @@ const CreateUser = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("adsasdasdsds");
     const hasErrors = Object.values(formErrors).some((error) => error);
     if (!hasErrors) {
       try {
