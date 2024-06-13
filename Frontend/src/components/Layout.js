@@ -28,15 +28,7 @@ const Layout = ({ children }) => {
   const { currentUser, setIsAuthenticated } = useAuthContext();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      if (decodedToken && decodedToken.FirstLogin === "True") {
-        setShowLogoutDialog(true);
-      }
-    }
-  }, []);
+  useEffect(() => {}, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -138,7 +130,7 @@ const Layout = ({ children }) => {
       </Box>
       <Footer />
 
-      <Dialog open={showLogoutDialog} onClose={handleCloseDialog}>
+      <Dialog open={currentUser.isFirst} onClose={handleCloseDialog}>
         <DialogTitle>Change Password</DialogTitle>
         <DialogContent>
           <Typography>
