@@ -9,7 +9,7 @@ const ManageAssignmentPage = () => {
                 Manage Assignment
             </Typography>
             <p>This is the Manage Assignment page.</p>
-        </>
+        </Layout>
     );
 };
 

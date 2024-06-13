@@ -1,6 +1,7 @@
 // pages/ManageAssetPage.js
 import { Typography } from '@mui/material';
 import React from 'react';
+import Layout from '../components/Layout';
 
 const ManageAssetPage = () => {
     return (
@@ -9,7 +10,7 @@ const ManageAssetPage = () => {
                 Manage Asset
             </Typography>
             <p>This is the Manage Asset page.</p>
-        </>
+        </Layout>
     );
 };
 

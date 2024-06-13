@@ -9,7 +9,7 @@ const ReportPage = () => {
                 Report
             </Typography>
             <p>This is the Report page.</p>
-        </>
+        </Layout>
     );
 };
 

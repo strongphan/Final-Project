@@ -9,7 +9,7 @@ const RequestForReturningPage = () => {
                 Request for Returning
             </Typography>
             <p>This is the Request for Returning page.</p>
-        </>
+        </Layout>
     );
 };
 

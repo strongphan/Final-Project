@@ -311,7 +311,7 @@ const ManageUserPage = () => {
           />
         </Box>
       </Paper>
-    </>
+    </Layout>
   );
 };
 
