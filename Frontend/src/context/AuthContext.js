@@ -3,9 +3,9 @@ import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext({
   isAuthenticated: false,
-  setIsAuthenticated: () => {},
+  setIsAuthenticated: () => { },
   currentUser: { name: "", id: "", role: "", locality: "" },
-  setCurrentUser: () => {},
+  setCurrentUser: () => { },
 });
 
 export const useAuthContext = () => useContext(AuthContext);
@@ -36,7 +36,7 @@ const AuthProvider = ({ children }) => {
             ],
             locality:
               decodedToken[
-                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/locality"
+              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/locality"
               ],
           });
         } catch (error) {
