@@ -36,7 +36,7 @@ const ManageUserPage = () => {
   const [users, setUser] = useState([]);
 
   const getUsers = async (filterRequest) => {
-    const res = FilterRequest(filterRequest)
+    const res = await FilterRequest(filterRequest)
     // const res = await axios.post("https://localhost:7083/api/users/filter", {
     //   searchTerm: filterRequest.searchTerm,
     //   sortColumn: filterRequest.sortColumn,
@@ -44,6 +44,7 @@ const ManageUserPage = () => {
     //   page: filterRequest.page,
     //   pageSize: filterRequest.pageSize,
     // });
+    console.log('res', res);
     setUser(res.data.data);
     setTotalCount(res.data.totalCount);
   };
