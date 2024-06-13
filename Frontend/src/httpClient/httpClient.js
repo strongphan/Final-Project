@@ -24,13 +24,33 @@ instance.interceptors.response.use(
         return { data: res?.data, status: res.status };
     },
     async (err) => {
-        //có thể thêm case 403 ("Không có quyền truy cập")
-        if (err.response.status === 401) {
-            window.location.href = "/login";
-            return Promise.reject(err.response.data);
+        try {
+          if (err.response.status > 400) {
+            if (err.response.status === 401) {
+              window.location.href = "/login";
+              alert("You are not authorized to access this resource");
+              localStorage.removeItem("token");
+              return Promise.reject(err.response.data);
+            } else if (err.response.status === 403) {
+              alert("You don't have permission to access this resource");
+              return Promise.reject(err.response.data);
+            } else if (err.response.status === 404) {
+              alert("Resource not found");
+              return Promise.reject(err.response.data);
+            } 
+            else {
+              alert(
+                "An error occured while processing your request. Please try again later.",
+              );
+            }
+          }
+        } catch (error) {
+          console.error(error);
+          alert(
+            "An error occured while processing your request. Please try again later.",
+          );
         }
-        return Promise.reject(err)
-    }
+      },
 );
 
 export const httpClient = instance
