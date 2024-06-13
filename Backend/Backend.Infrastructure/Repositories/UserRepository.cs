@@ -1,6 +1,7 @@
 ﻿using Backend.Application.Common.Paging;
 using Backend.Application.IRepositories;
 using Backend.Domain.Entity;
+using Backend.Domain.Enum;
 using Backend.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -38,9 +39,17 @@ namespace Backend.Infrastructure.Repository
         {
             IQueryable<User> query = _table;
 
-            if (request.Role != null)
+            if (!string.IsNullOrWhiteSpace(request.Type))
             {
-                query = query.Where(p => p.Type == request.Role);
+                if(request.Type == "Admin")
+                {
+                    query = query.Where(p => p.Type == Role.Admin);
+                }
+                else
+                {
+                    query = query.Where(p => p.Type == Role.Staff);
+
+                }
             }
             if (!string.IsNullOrWhiteSpace(request.SearchTerm))
             {
@@ -68,7 +77,7 @@ namespace Backend.Infrastructure.Repository
             "name" => user => user.FirstName + " " + user.LastName,
             "date" => user => user.JoinedDate,
             "type" => user => user.Type,
-            _ => user => user.FirstName
+            _ => user => user.FirstName + " " + user.LastName
         };
     }
 }
