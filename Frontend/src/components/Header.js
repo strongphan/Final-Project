@@ -2,14 +2,16 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
 import { useAuthContext } from "../context/AuthContext";
-
+import { useNavigate } from "react-router-dom";
 const Header = ({ title }) => {
   const { isAuthenticated, currentUser } = useAuthContext();
   const { setIsAuthenticated } = useAuthContext();
-
+  const navigate = useNavigate();
   const handleLogout = () => {
     setIsAuthenticated(true); // Update authentication state
-    localStorage.removeItem("token"); // Remove token from local storage
+    localStorage.removeItem("token");
+    // Remove token from local storage
+    navigate("/login");
     window.location.reload();
   };
 

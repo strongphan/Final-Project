@@ -15,7 +15,6 @@ import Header from "./Header";
 import Footer from "./Footer";
 import VerticalNavbar from "./VerticalNavbar";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode"; // Import jwtDecode
 import axios from "axios";
 import { useAuthContext } from "../context/AuthContext";
 import { AppRouter } from "../routes/AppRouter";
@@ -30,13 +29,10 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      if (decodedToken && decodedToken.FirstLogin === "True") {
-        setShowLogoutDialog(true);
-      }
+    if (token && currentUser.isFirst) {
+      setShowLogoutDialog(true);
     }
-  }, []);
+  }, [currentUser.isFirst]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -81,6 +77,7 @@ const Layout = ({ children }) => {
           const data = response2.data;
           setIsAuthenticated(true);
           localStorage.setItem("token", data.token);
+          currentUser.isFirst = false;
 
           setNewPassword("");
           setShowLogoutDialog(false);
@@ -138,7 +135,12 @@ const Layout = ({ children }) => {
       </Box>
       <Footer />
 
-      <Dialog open={showLogoutDialog} onClose={handleCloseDialog}>
+      <Dialog
+        open={currentUser.isFirst && showLogoutDialog}
+        onClose={handleCloseDialog}
+        disableBackdropClick
+        disableEscapeKeyDown
+      >
         <DialogTitle>Change Password</DialogTitle>
         <DialogContent>
           <Typography>
@@ -177,6 +179,8 @@ const Layout = ({ children }) => {
       <Dialog
         open={showSuccessDialog}
         onClose={() => setShowSuccessDialog(false)}
+        disableBackdropClick
+        disableEscapeKeyDown
       >
         <DialogTitle>Success</DialogTitle>
         <DialogContent>

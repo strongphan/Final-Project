@@ -3,9 +3,9 @@ import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext({
   isAuthenticated: false,
-  setIsAuthenticated: () => { },
-  currentUser: { name: "", id: "", role: "", locality: "" },
-  setCurrentUser: () => { },
+  setIsAuthenticated: () => {},
+  currentUser: { name: "", id: "", role: "", locality: "", isFirst: false },
+  setCurrentUser: () => {},
 });
 
 export const useAuthContext = () => useContext(AuthContext);
@@ -13,6 +13,7 @@ export const useAuthContext = () => useContext(AuthContext);
 const AuthProvider = ({ children }) => {
   const token = localStorage.getItem("token");
   const [isAuthenticated, setIsAuthenticated] = useState(!!token);
+
   const [currentUser, setCurrentUser] = useState({
     name: "",
     id: "",
@@ -36,8 +37,9 @@ const AuthProvider = ({ children }) => {
             ],
             locality:
               decodedToken[
-              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/locality"
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/locality"
               ],
+            isFirst: decodedToken.FirstLogin === "True",
           });
         } catch (error) {
           console.error("Error decoding token: ", error);
