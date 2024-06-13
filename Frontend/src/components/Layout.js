@@ -21,7 +21,9 @@ import VerticalNavbar from "./VerticalNavbar";
 const Layout = ({ children }) => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [validationError, setValidationError] = useState("");
+  const [cValidationError, setCValidationError] = useState("");
   const [showSuccessDialog, setShowSuccessDialog] = useState(false); // New state for success dialog
   const { currentUser, isAuthenticated, setIsAuthenticated } = useAuthContext();
   const navigate = useNavigate();
@@ -117,18 +119,21 @@ const Layout = ({ children }) => {
       }
     }
   };
-
+  const handleConfirmPassword = () => {
+    if (!confirmPassword) {
+      setCValidationError("Confirm password cannot be empty.");
+    } else if (confirmPassword !== newPassword) {
+      setCValidationError("Passwords do not match. Please re-enter.");
+      return;
+    }
+  };
   return (
     <div>
       <CssBaseline />
       <Header />
-      <Box
-        display="flex"
-        p={2}>
+      <Box display="flex" p={2}>
         <Box>{isAuthenticated && <VerticalNavbar />}</Box>
-        <Box
-          flexGrow={1}
-          ml={2}>
+        <Box flexGrow={1} ml={2}>
           <main style={{ p: "2" }}>
             <AppRouter />
           </main>
@@ -140,7 +145,8 @@ const Layout = ({ children }) => {
         open={currentUser.isFirst && showLogoutDialog}
         onClose={handleCloseDialog}
         disableBackdropClick
-        disableEscapeKeyDown>
+        disableEscapeKeyDown
+      >
         <DialogTitle sx={{ color: "#D6001C" }}>Change Password</DialogTitle>
         <DialogContent>
           <Typography>
@@ -157,6 +163,7 @@ const Layout = ({ children }) => {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               onBlur={handlePasswordBlur}
+              required
               sx={{
                 "& label.Mui-focused": { color: "#000" },
                 "& .MuiOutlinedInput-root": {
@@ -166,19 +173,35 @@ const Layout = ({ children }) => {
             />
           </Box>
           {validationError && (
-            <Typography
-              color="error"
-              variant="caption"
-              component="div">
+            <Typography color="error" variant="caption" component="div">
               {validationError}
+            </Typography>
+          )}
+          <Box mt={2}>
+            <TextField
+              margin="dense"
+              label="Confirm Password"
+              type="password"
+              fullWidth
+              required
+              value={confirmPassword}
+              onBlur={handleConfirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </Box>
+          {cValidationError && (
+            <Typography color="error" variant="caption" component="div">
+              {cValidationError}
             </Typography>
           )}
         </DialogContent>
         <DialogActions>
           <Button
+            disabled={!!validationError || !!cValidationError}
             onClick={handlePasswordChange}
             variant="contained"
-            sx={{ bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}>
+            sx={{ bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}
+          >
             Save
           </Button>
         </DialogActions>
@@ -188,7 +211,8 @@ const Layout = ({ children }) => {
         open={showSuccessDialog}
         onClose={() => setShowSuccessDialog(false)}
         disableBackdropClick
-        disableEscapeKeyDown>
+        disableEscapeKeyDown
+      >
         <DialogTitle>Success</DialogTitle>
         <DialogContent>
           <Typography>Password changed successfully.</Typography>
@@ -196,7 +220,8 @@ const Layout = ({ children }) => {
         <DialogActions>
           <Button
             onClick={() => setShowSuccessDialog(false)}
-            sx={{ bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}>
+            sx={{ bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}
+          >
             OK
           </Button>
         </DialogActions>
