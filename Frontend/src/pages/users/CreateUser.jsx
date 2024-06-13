@@ -1,29 +1,28 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { format } from "date-fns";
+import { vi } from "date-fns/locale";
 import {
   Box,
   Button,
   Container,
   FormControl,
-  FormControlLabel,
   FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
-  Radio,
-  RadioGroup,
   Select,
   TextField,
   Typography,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import axios from "axios";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
-
 const CreateUser = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuthContext();
@@ -31,10 +30,10 @@ const CreateUser = () => {
     firstName: "",
     lastName: "",
     dateOfBirth: null,
-    gender: 2,
+    gender: 1,
     joinedDate: null,
     type: 0,
-    location: "",
+    location: currentUser.locality,
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -62,10 +61,15 @@ const CreateUser = () => {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
       } is required`;
-    } else if (value.length < 2 || value.length > 20) {
+    } else if (value.length < 2 ) {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
-      } must be between 2 and 20 letters`;
+      } must be at least 2 characters long.`;
+    }
+    else if ( value.length > 20) {
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } must not exceed 20 characters.`;
     } else if (!isValid) {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
@@ -86,10 +90,15 @@ const CreateUser = () => {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
       } is required`;
-    } else if (trimmedValue.length < 2 || trimmedValue.length > 20) {
+    } else if (trimmedValue.length < 2 ) {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
-      } must be between 2 and 20 letters`;
+      } must be at least 2 characters long.`;
+    }
+    else if ( trimmedValue.length > 20) {
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } must not exceed 20 characters.`;
     }
 
     setFormErrors({ ...formErrors, [name]: errorMessage });
@@ -109,31 +118,48 @@ const CreateUser = () => {
     if (!date) return "";
     return format(date, "dd/MM/yyyy");
   };
+
+  const isWeekend = (date) => {
+    const day = date?.getDay();
+    return day === 6 || day === 0; 
+  };
+
   useEffect(() => {
-    if (users.dateOfBirth) {
-      const dob = new Date(users.dateOfBirth);
+    let errorMessage = "";
+    if (!users.joinedDate) {
+      errorMessage = "Joined date is required.";
+    } else {
       const joined = new Date(users.joinedDate);
+      const dob = new Date(users.dateOfBirth);
+  
+      if (dob && joined < dob) {
+        errorMessage = "Joined date must be after date of birth.";
+      } else if (isWeekend(joined)) {
+        errorMessage = "Joined date must not be on a weekend.";
+      }
+    }
+  
+    setFormErrors((prevErrors) => ({ ...prevErrors, joinedDate: errorMessage }));
+  }, [users.joinedDate, users.dateOfBirth]);
+  
+  useEffect(() => {
+    let errorMessage = "";
+    if (!users.dateOfBirth) {
+      errorMessage = "Date of birth is required.";
+    } else {
+      const dob = new Date(users.dateOfBirth);
       const age = Math.floor(
         (Date.now() - dob) / (365.25 * 24 * 60 * 60 * 1000)
       );
+  
       if (age < 18) {
-        setFormErrors((prevErrors) => ({ ...prevErrors, dateOfBirth: true }));
-      } else {
-        setFormErrors((prevErrors) => ({ ...prevErrors, dateOfBirth: false }));
+        errorMessage = "User is under 18. Please select a different date";
       }
-      if (joined < dob) {
-        setFormErrors((prevErrors) => ({ ...prevErrors, joinedDate: true }));
-      } else {
-        setFormErrors((prevErrors) => ({ ...prevErrors, joinedDate: false }));
-      }
-    } else {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        dateOfBirth: !users.dateOfBirth,
-        joinedDate: !users.joinedDate,
-      }));
     }
-  }, [users.dateOfBirth, users.joinedDate]);
+  
+    setFormErrors((prevErrors) => ({ ...prevErrors, dateOfBirth: errorMessage }));
+  }, [users.dateOfBirth]);
+
 
   const handleSubmit = async (event) => {
     console.log("location : ", currentUser.locality);
@@ -230,7 +256,7 @@ const CreateUser = () => {
               </Grid>
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
-                  Date of Birth
+                  Date Of Birth
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
                 </Typography>
               </Grid>
@@ -251,13 +277,8 @@ const CreateUser = () => {
                     )}
                   />
                 </LocalizationProvider>
-
-                {formErrors.dateOfBirth && touched.dateOfBirth && (
-                  <FormHelperText error>
-                    {users.dateOfBirth
-                      ? "User must be at least 18 years old!"
-                      : "Date of Birth is required!"}
-                  </FormHelperText>
+                {formErrors.dateOfBirth && (
+                  <FormHelperText error>{formErrors.dateOfBirth}</FormHelperText>
                 )}
               </Grid>
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
@@ -323,12 +344,8 @@ const CreateUser = () => {
                     )}
                   />
                 </LocalizationProvider>
-                {formErrors.joinedDate && touched.joinedDate && (
-                  <FormHelperText error>
-                    {users.joinedDate
-                      ? "Joined date must be greater than Date of Birth!"
-                      : "Joined Date is required!"}
-                  </FormHelperText>
+                {formErrors.joinedDate && (
+                  <FormHelperText error>{formErrors.joinedDate}</FormHelperText>
                 )}
               </Grid>
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
@@ -360,25 +377,13 @@ const CreateUser = () => {
                   )}
                 </FormControl>
               </Grid>
-
-              <Grid
-                item
-                xs={3}
-                sx={{
-                  display: users.type === 1 ? "flex" : "none",
-                  alignItems: "center",
-                }}
-              >
+              <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
                   Location
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
                 </Typography>
               </Grid>
-              <Grid
-                item
-                xs={9}
-                sx={{ display: users.type === 1 ? "block" : "none" }}
-              >
+              <Grid item xs={9}>
                 <FormControl
                   fullWidth
                   margin="dense"
@@ -392,12 +397,13 @@ const CreateUser = () => {
                     value={users.location}
                     onChange={handleChange}
                     label="Location"
+                    readOnly={users.type === 0}
                   >
-                    <MenuItem value="hanoi">Ha Noi</MenuItem>
-                    <MenuItem value="hochiminh">Ho Chi Minh</MenuItem>
+                    <MenuItem value="HaNoi">Ha Noi</MenuItem>
+                    <MenuItem value="HCM">Ho Chi Minh</MenuItem>
                   </Select>
                   {formErrors.location && (
-                    <FormHelperText error>Location is required!</FormHelperText>
+                    <FormHelperText error>{formErrors.location}</FormHelperText>
                   )}
                 </FormControl>
               </Grid>
@@ -409,7 +415,13 @@ const CreateUser = () => {
                   <Button
                     variant="contained"
                     type="submit"
-                    sx={{ backgroundColor: "#d32f2f", mr: 3 }}
+                    sx={{
+                      backgroundColor: "#d32f2f",
+                      mr: 3,
+                      "&:hover": {
+                        backgroundColor: "#a50000",
+                      },
+                    }}
                     disabled={Object.values(formErrors).some((error) => error)}
                     onClick={handleSubmit}
                   >
