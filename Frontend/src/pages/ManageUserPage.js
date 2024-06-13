@@ -44,7 +44,7 @@ const ManageUserPage = () => {
   const [users, setUser] = useState([]);
 
   const getUsers = async (filterRequest) => {
-    const res = await FilterRequest(filterRequest)
+    const res = await FilterRequest(filterRequest);
 
     setUser(res.data.data);
     setTotalCount(res.data.totalCount);
