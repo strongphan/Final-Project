@@ -74,19 +74,19 @@ const CreateUser = () => {
 
   const handleLastNameChange = (event) => {
     const { name, value } = event.target;
-    setUsers({ ...users, [name]: value });
-    const isValid = /^[a-zA-Z]{2,20}$/.test(value);
+    const trimmedValue = value.replace(/\s+/g, ' '); 
+    setUsers({ ...users, [name]: trimmedValue });
+    const isValid = /^[a-zA-Z\s]{2,20}$/.test(trimmedValue);
 
     let errorMessage = "";
-    if (value.trim() === "") {
+    if (trimmedValue.trim() === "") {
       errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
-    } else if (value.length < 2 || value.length > 20 ) {
+    } else if (trimmedValue.length < 2 || trimmedValue.length > 20) {
       errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} must be between 2 and 20 letters`;
     }
 
     setFormErrors({ ...formErrors, [name]: errorMessage });
   };
-
   
 
   const handleTypeChange = (event) => {
@@ -162,7 +162,8 @@ const CreateUser = () => {
   };
 
   return (
-    <Layout title="> Create New User">
+    
+    <>
       <Container sx={{ display: "flex", justifyContent: "center", my: 4 }}>
         <Box sx={{ width: "60%", borderRadius: 1, p: 1 }}>
           <Typography
@@ -421,7 +422,7 @@ const CreateUser = () => {
           </form>
         </Box>
       </Container>
-    </Layout>
+      </>
   );
 };
 

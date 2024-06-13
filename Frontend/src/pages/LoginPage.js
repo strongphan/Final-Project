@@ -1,24 +1,23 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  Paper,
-  TextField,
-  Button,
-  IconButton,
-  InputAdornment,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Layout from "../components/Layout";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  InputAdornment,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { useAuthContext } from "../context/AuthContext"; // Import the useAuthContext hook
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext"; // Import the useAuthContext hook
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,7 +34,7 @@ const LoginPage = () => {
   const [newPasswordError, setNewPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [userId, setUserId] = useState(null); // Track user id for password change
-  const { isAuthenticated, setIsAuthenticated } = useAuthContext(); // Use the useAuthContext hook to access authentication state and setter
+  const { setIsAuthenticated } = useAuthContext(); // Use the useAuthContext hook to access authentication state and setter
   const navigate = useNavigate();
   const handleAlertClose = () => {
     setAlertOpen(false);
@@ -90,7 +89,7 @@ const LoginPage = () => {
           setIsNewUser(true);
           setUserId(
             decodedToken[
-              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
             ]
           );
         }
@@ -99,8 +98,8 @@ const LoginPage = () => {
         // Set error message format
         setAlertMessage(
           "Error: " +
-            (response.data.message ||
-              "Invalid username or password. Please try again.")
+          (response.data.message ||
+            "Invalid username or password. Please try again.")
         );
         setAlertOpen(true);
       }
@@ -117,15 +116,12 @@ const LoginPage = () => {
 
   const handlePasswordChange = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:5224/api/users/change_password",
-        {
-          id: userId,
-          oldPassword: password, // Use the current password for the old password
-          newPassword: newPassword,
-          confirmPassword: confirmPassword,
-        }
-      );
+      await axios.post("http://localhost:5224/api/users/change_password", {
+        id: userId,
+        oldPassword: password, // Use the current password for the old password
+        newPassword: newPassword,
+        confirmPassword: confirmPassword,
+      });
 
       // Handle success or failure of password change
     } catch (error) {
@@ -172,7 +168,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Layout>
+    <>
       <Paper elevation={3} sx={{ p: 3, mt: 3, mb: 3 }}>
         <Box
           sx={{
@@ -333,7 +329,7 @@ const LoginPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Layout>
+    </>
   );
 };
 
