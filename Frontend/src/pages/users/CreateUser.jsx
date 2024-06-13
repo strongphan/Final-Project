@@ -65,7 +65,7 @@ const CreateUser = () => {
     setUser({ ...user, [name]: date });
     setTouched({ ...touched, [name]: true });
   };
-  
+
   useEffect(() => {
     if (user.dateOfBirth && user.joinedDate) {
       const dob = new Date(user.dateOfBirth);
@@ -114,7 +114,7 @@ const CreateUser = () => {
   };
 
   return (
-    <Layout title="Manage User > Create New User">
+    <>
       <Container sx={{ display: "flex", justifyContent: "center", my: 4 }}>
         <Box sx={{ width: "60%", borderRadius: 1, p: 1 }}>
           <Typography
@@ -367,7 +367,7 @@ const CreateUser = () => {
           </form>
         </Box>
       </Container>
-    </Layout>
+    </>
   );
 };
 

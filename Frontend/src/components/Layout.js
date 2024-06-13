@@ -4,18 +4,19 @@ import { CssBaseline, Box } from '@mui/material';
 import Header from './Header';
 import Footer from './Footer';
 import VerticalNavbar from './VerticalNavbar';
+import { AppRouter } from '../routes/AppRouter';
 
-const Layout = ({ children, title }) => { // Add a title prop
+const Layout = () => {
     return (
         <div>
             <CssBaseline />
-            <Header title={title} />
+            <Header />
             <Box display="flex" paddingTop={2} paddingLeft={2}>
                 <Box>
                     <VerticalNavbar />
                 </Box>
                 <main>
-                    {children}
+                    <AppRouter />
                 </main>
             </Box>
             <Footer />

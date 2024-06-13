@@ -1,5 +1,6 @@
 // pages/ManageUserPage.js
 import { ArrowDownward, ArrowUpward, Delete, Edit } from "@mui/icons-material";
+import { Sheet } from "@mui/joy";
 import {
   Box,
   Button,
@@ -19,10 +20,8 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Layout from "../components/Layout";
-import { Sheet } from "@mui/joy";
 import { useNavigate } from "react-router";
-import axios from "axios";
+import { FilterRequest } from "../services/Service";
 
 const ManageUserPage = () => {
   const navigate = useNavigate();
@@ -35,14 +34,17 @@ const ManageUserPage = () => {
     pageSize: "20",
   });
   const [users, setUser] = useState([]);
+
   const getUsers = async (filterRequest) => {
-    const res = await axios.post("https://localhost:7083/api/users/filter", {
-      searchTerm: filterRequest.searchTerm,
-      sortColumn: filterRequest.sortColumn,
-      sortOrder: filterRequest.sortOrder,
-      page: filterRequest.page,
-      pageSize: filterRequest.pageSize,
-    });
+    const res = await FilterRequest(filterRequest)
+    // const res = await axios.post("https://localhost:7083/api/users/filter", {
+    //   searchTerm: filterRequest.searchTerm,
+    //   sortColumn: filterRequest.sortColumn,
+    //   sortOrder: filterRequest.sortOrder,
+    //   page: filterRequest.page,
+    //   pageSize: filterRequest.pageSize,
+    // });
+    console.log('res', res);
     setUser(res.data.data);
     setTotalCount(res.data.totalCount);
   };
@@ -79,8 +81,8 @@ const ManageUserPage = () => {
           prev.sortOrder === "descend"
             ? "asc"
             : prev.sortOrder === "asc"
-            ? ""
-            : "descend";
+              ? ""
+              : "descend";
       } else {
         // Set to descending if switching columns
         newSortOrder = "";
@@ -107,7 +109,7 @@ const ManageUserPage = () => {
     return null;
   };
   return (
-    <Layout title=" -> Manage User">
+    <>
       <Paper
         elevation={3}
         style={{
@@ -309,7 +311,7 @@ const ManageUserPage = () => {
           />
         </Box>
       </Paper>
-    </Layout>
+    </>
   );
 };
 
