@@ -1,23 +1,22 @@
-import React, { useState } from "react";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
   Box,
   Button,
-  TextField,
-  Typography,
-  Paper,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
   InputAdornment,
+  Paper,
+  TextField,
+  Typography,
 } from "@mui/material";
-import Layout from "../components/Layout";
 import axios from "axios";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useAuthContext } from "../context/AuthContext";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -74,7 +73,9 @@ const LoginPage = () => {
 
   return (
     <>
-      <Paper elevation={3} sx={{ p: 3, mt: 3, mb: 3 }}>
+      <Paper
+        elevation={3}
+        sx={{ p: 3, mt: 3, mb: 3 }}>
         <Box
           sx={{
             display: "flex",
@@ -91,16 +92,16 @@ const LoginPage = () => {
               width: "100%",
               maxWidth: "400px",
             },
-          }}
-        >
+          }}>
           <Typography
             variant="h2"
             gutterBottom
-            sx={{ color: "#D6001C", fontWeight: "bold", mt: 3 }}
-          >
+            sx={{ color: "#D6001C", fontWeight: "bold", mt: 3 }}>
             Login to your account
           </Typography>
-          <Typography variant="h6" sx={{ mt: 2 }}>
+          <Typography
+            variant="h6"
+            sx={{ mt: 2 }}>
             Access your asset management system securely and efficiently.
           </Typography>
           <form onSubmit={handleLogin}>
@@ -110,7 +111,7 @@ const LoginPage = () => {
               value={username}
               onChange={(e) =>
                 validateInput(
-                  e.target.value,
+                  e.target.value.trim(),
                   setUsername,
                   setUsernameError,
                   "Username must not be empty."
@@ -121,9 +122,9 @@ const LoginPage = () => {
               sx={{
                 mt: 2,
                 width: "100%",
-                "& label.Mui-focused": { color: "#D6001C" },
+                "& label.Mui-focused": { color: "#000" },
                 "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": { borderColor: "#D6001C" },
+                  "&.Mui-focused fieldset": { borderColor: "#000" },
                 },
               }}
             />
@@ -134,7 +135,7 @@ const LoginPage = () => {
               value={password}
               onChange={(e) =>
                 validateInput(
-                  e.target.value,
+                  e.target.value.trim(),
                   setPassword,
                   setPasswordError,
                   "Password must not be empty."
@@ -149,8 +150,7 @@ const LoginPage = () => {
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={togglePasswordVisibility}
-                      edge="end"
-                    >
+                      edge="end">
                       {showPassword ? (
                         <VisibilityOffIcon />
                       ) : (
@@ -163,14 +163,16 @@ const LoginPage = () => {
               sx={{
                 mt: 2,
                 width: "100%",
-                "& label.Mui-focused": { color: "#D6001C" },
+                "& label.Mui-focused": { color: "#000" },
                 "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": { borderColor: "#D6001C" },
+                  "&.Mui-focused fieldset": { borderColor: "#000" },
                 },
               }}
             />
             {isCapsLockOn && (
-              <Typography variant="caption" color="error">
+              <Typography
+                variant="caption"
+                color="error">
                 *Caps Lock is on.
               </Typography>
             )}
@@ -178,24 +180,25 @@ const LoginPage = () => {
               type="submit"
               variant="contained"
               color="primary"
+              disabled={!username || !password}
               sx={{
                 mt: 2,
                 bgcolor: "#D6001C",
                 "&:hover": {
                   bgcolor: "rgba(214, 0, 28, 0.8)",
                 },
-              }}
-            >
+              }}>
               Login
             </Button>
           </form>
         </Box>
       </Paper>
 
-      <Dialog open={alertOpen} onClose={handleAlertClose}>
+      <Dialog
+        open={alertOpen}
+        onClose={handleAlertClose}>
         <DialogTitle
-          sx={{ bgcolor: "grey.300", color: "#D6001C", fontWeight: "bold" }}
-        >
+          sx={{ bgcolor: "grey.300", color: "#D6001C", fontWeight: "bold" }}>
           Error
         </DialogTitle>
         <DialogContent>
@@ -204,7 +207,9 @@ const LoginPage = () => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAlertClose} sx={{ color: "#D6001C" }}>
+          <Button
+            onClick={handleAlertClose}
+            sx={{ color: "#D6001C" }}>
             OK
           </Button>
         </DialogActions>

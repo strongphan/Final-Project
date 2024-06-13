@@ -1,30 +1,29 @@
-import React, { useState, useEffect } from "react";
 import {
-  CssBaseline,
   Box,
-  Typography,
-  Paper,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
+  CssBaseline,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   TextField,
+  Typography,
 } from "@mui/material";
-import Header from "./Header";
-import Footer from "./Footer";
-import VerticalNavbar from "./VerticalNavbar";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 import { AppRouter } from "../routes/AppRouter";
+import Footer from "./Footer";
+import Header from "./Header";
+import VerticalNavbar from "./VerticalNavbar";
 
 const Layout = ({ children }) => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [validationError, setValidationError] = useState("");
   const [showSuccessDialog, setShowSuccessDialog] = useState(false); // New state for success dialog
-  const { currentUser, setIsAuthenticated } = useAuthContext();
+  const { currentUser, isAuthenticated, setIsAuthenticated } = useAuthContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -123,11 +122,13 @@ const Layout = ({ children }) => {
     <div>
       <CssBaseline />
       <Header />
-      <Box display="flex" p={2}>
-        <Box>
-          <VerticalNavbar />
-        </Box>
-        <Box flexGrow={1} ml={2}>
+      <Box
+        display="flex"
+        p={2}>
+        <Box>{isAuthenticated && <VerticalNavbar />}</Box>
+        <Box
+          flexGrow={1}
+          ml={2}>
           <main style={{ p: "2" }}>
             <AppRouter />
           </main>
@@ -139,9 +140,8 @@ const Layout = ({ children }) => {
         open={currentUser.isFirst && showLogoutDialog}
         onClose={handleCloseDialog}
         disableBackdropClick
-        disableEscapeKeyDown
-      >
-        <DialogTitle>Change Password</DialogTitle>
+        disableEscapeKeyDown>
+        <DialogTitle sx={{ color: "#D6001C" }}>Change Password</DialogTitle>
         <DialogContent>
           <Typography>
             This is the first time you've logged in. You must change your
@@ -157,10 +157,19 @@ const Layout = ({ children }) => {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               onBlur={handlePasswordBlur}
+              sx={{
+                "& label.Mui-focused": { color: "#000" },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#000" },
+                },
+              }}
             />
           </Box>
           {validationError && (
-            <Typography color="error" variant="caption" component="div">
+            <Typography
+              color="error"
+              variant="caption"
+              component="div">
               {validationError}
             </Typography>
           )}
@@ -169,8 +178,7 @@ const Layout = ({ children }) => {
           <Button
             onClick={handlePasswordChange}
             variant="contained"
-            color="primary"
-          >
+            sx={{ bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}>
             Save
           </Button>
         </DialogActions>
@@ -180,14 +188,15 @@ const Layout = ({ children }) => {
         open={showSuccessDialog}
         onClose={() => setShowSuccessDialog(false)}
         disableBackdropClick
-        disableEscapeKeyDown
-      >
+        disableEscapeKeyDown>
         <DialogTitle>Success</DialogTitle>
         <DialogContent>
           <Typography>Password changed successfully.</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowSuccessDialog(false)} color="primary">
+          <Button
+            onClick={() => setShowSuccessDialog(false)}
+            sx={{ bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}>
             OK
           </Button>
         </DialogActions>
