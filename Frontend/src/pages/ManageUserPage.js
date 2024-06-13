@@ -109,7 +109,7 @@ const ManageUserPage = () => {
     return null;
   };
   return (
-    <>
+    <Layout title=" > Manage User">
       <Paper
         elevation={3}
         style={{
@@ -311,7 +311,7 @@ const ManageUserPage = () => {
           />
         </Box>
       </Paper>
-    </>
+    </Layout>
   );
 };
 
