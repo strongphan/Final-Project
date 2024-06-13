@@ -22,7 +22,6 @@ import { AppRouter } from "../routes/AppRouter";
 
 const Layout = ({ children }) => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-  const [firstLogin, setFirstLogin] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [validationError, setValidationError] = useState("");
   const [showSuccessDialog, setShowSuccessDialog] = useState(false); // New state for success dialog
@@ -34,16 +33,13 @@ const Layout = ({ children }) => {
     if (token) {
       const decodedToken = jwtDecode(token);
       if (decodedToken && decodedToken.FirstLogin === "True") {
-        setFirstLogin(true);
         setShowLogoutDialog(true);
-        localStorage.setItem("firstLogin", "true");
       }
     }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("password");
     navigate("/");
   };
 
@@ -75,23 +71,21 @@ const Layout = ({ children }) => {
             confirmPassword: newPassword,
           }
         );
-        const username = currentUser.username;
-        const response2 = await axios.post(
-          "https://localhost:7083/api/users/login",
-          { username, newPassword }
-        );
-        const data = response2.data;
-        if (data.flag) {
+
+        if (response1.data === true) {
+          const username = currentUser.name;
+          const response2 = await axios.post(
+            "https://localhost:7083/api/users/login",
+            { userName: username, password: newPassword }
+          );
+          const data = response2.data;
           setIsAuthenticated(true);
           localStorage.setItem("token", data.token);
-          navigate("/");
-        }
-        if (response1.data === true) {
+
           setNewPassword("");
           setShowLogoutDialog(false);
           localStorage.removeItem("firstLogin");
           setShowSuccessDialog(true);
-          setFirstLogin(false);
           localStorage.removeItem("password");
         } else {
           setValidationError("Failed to change password. Please try again.");
@@ -144,7 +138,7 @@ const Layout = ({ children }) => {
       </Box>
       <Footer />
 
-      <Dialog open={showLogoutDialog && firstLogin} onClose={handleCloseDialog}>
+      <Dialog open={showLogoutDialog} onClose={handleCloseDialog}>
         <DialogTitle>Change Password</DialogTitle>
         <DialogContent>
           <Typography>
