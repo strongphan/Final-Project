@@ -9,15 +9,13 @@ namespace Backend.Infrastructure.Repository
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        private readonly AssetContext _assetContext;
         public UserRepository(AssetContext context) : base(context)
         {
-            _assetContext = context;
         }
         public async Task<User?> FindUserByUserNameAsync(string email) => await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.UserName == email);
         public async Task<User> GenerateUserInformation(User user)
         {
-            int maxId = await _context.Users.MaxAsync(s => (int?)s.Id) ?? 0;
+            int maxId = await _table.CountAsync();
             string staffCode = $"SD{(maxId + 1).ToString("D4")}";
 
             // Generate Username
@@ -67,7 +65,7 @@ namespace Backend.Infrastructure.Repository
         request.SortColumn?.ToLower() switch
         {
             "code" => user => user.StaffCode,
-            "name" => user => user.FirstName,
+            "name" => user => user.FirstName + " " + user.LastName,
             "date" => user => user.JoinedDate,
             "type" => user => user.Type,
             _ => user => user.FirstName

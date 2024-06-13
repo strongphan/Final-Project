@@ -15,7 +15,6 @@ import {
   Grid,
   FormHelperText,
 } from "@mui/material";
-import Layout from "../../components/Layout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -23,12 +22,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { vi } from "date-fns/locale";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { useAuthContext } from "../../context/AuthContext";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 import { flushSync } from "react-dom";
 
 const CreateUser = () => {
   const navigate = useNavigate();
-  const {currentUser} = useAuthContext();
+  const { currentUser } = useAuthContext();
   const [users, setUsers] = useState({
     firstName: "",
     lastName: "",
@@ -61,12 +60,17 @@ const CreateUser = () => {
 
     let errorMessage = "";
     if (value.trim() === "") {
-      errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
-    } else if (value.length < 2 || value.length > 20 ) {
-      errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} must be between 2 and 20 letters`;
-    }
-    else if (!isValid){
-      errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} does not contain space`;
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } is required`;
+    } else if (value.length < 2 || value.length > 20) {
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } must be between 2 and 20 letters`;
+    } else if (!isValid) {
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } does not contain space`;
     }
 
     setFormErrors({ ...formErrors, [name]: errorMessage });
@@ -74,26 +78,28 @@ const CreateUser = () => {
 
   const handleLastNameChange = (event) => {
     const { name, value } = event.target;
-    const trimmedValue = value.replace(/\s+/g, ' '); 
+    const trimmedValue = value.replace(/\s+/g, " ");
     setUsers({ ...users, [name]: trimmedValue });
     const isValid = /^[a-zA-Z\s]{2,20}$/.test(trimmedValue);
 
     let errorMessage = "";
     if (trimmedValue.trim() === "") {
-      errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } is required`;
     } else if (trimmedValue.length < 2 || trimmedValue.length > 20) {
-      errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} must be between 2 and 20 letters`;
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } must be between 2 and 20 letters`;
     }
 
     setFormErrors({ ...formErrors, [name]: errorMessage });
   };
-  
 
   const handleTypeChange = (event) => {
     const { name, value } = event.target;
     setUsers({ ...users, [name]: value });
   };
-
 
   const handleDateChange = (name, date) => {
     setUsers({ ...users, [name]: date });
@@ -101,11 +107,11 @@ const CreateUser = () => {
   };
 
   const formatDate = (date) => {
-    if (!date) return '';
-    return format(date, 'dd/MM/yyyy');
+    if (!date) return "";
+    return format(date, "dd/MM/yyyy");
   };
   useEffect(() => {
-    if (users.dateOfBirth ) {
+    if (users.dateOfBirth) {
       const dob = new Date(users.dateOfBirth);
       const joined = new Date(users.joinedDate);
       const age = Math.floor(
@@ -133,16 +139,19 @@ const CreateUser = () => {
   const handleSubmit = async (event) => {
     console.log("location : ", currentUser.locality);
     event.preventDefault();
+    console.log("adsasdasdsds");
     const hasErrors = Object.values(formErrors).some((error) => error);
     if (!hasErrors) {
       try {
-        if(!users.location){
+        if (!users.location) {
           users.location = currentUser.locality;
         }
-        if(users.location){
-          users.location === "HaNoi" ? users.location = 1 : users.location = 0;
+        if (users.location) {
+          users.location === "HaNoi"
+            ? (users.location = 1)
+            : (users.location = 0);
         }
-        if(users.gender){
+        if (users.gender) {
           users.gender = +users.gender;
         }
         const response = await axios.post("https://localhost:7083/api/users", {
@@ -162,7 +171,6 @@ const CreateUser = () => {
   };
 
   return (
-    
     <>
       <Container sx={{ display: "flex", justifyContent: "center", my: 4 }}>
         <Box sx={{ width: "60%", borderRadius: 1, p: 1 }}>
@@ -196,7 +204,7 @@ const CreateUser = () => {
                   margin="dense"
                   error={formErrors.firstName}
                 />
-                               {formErrors.firstName && (
+                {formErrors.firstName && (
                   <FormHelperText error>{formErrors.firstName}</FormHelperText>
                 )}
               </Grid>
@@ -218,7 +226,7 @@ const CreateUser = () => {
                   required
                   error={formErrors.lastName}
                 />
-                               {formErrors.lastName && (
+                {formErrors.lastName && (
                   <FormHelperText error>{formErrors.lastName}</FormHelperText>
                 )}
               </Grid>
@@ -422,7 +430,7 @@ const CreateUser = () => {
           </form>
         </Box>
       </Container>
-      </>
+    </>
   );
 };
 

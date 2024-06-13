@@ -36,15 +36,9 @@ const ManageUserPage = () => {
   const [users, setUser] = useState([]);
 
   const getUsers = async (filterRequest) => {
-    const res = await FilterRequest(filterRequest)
-    // const res = await axios.post("https://localhost:7083/api/users/filter", {
-    //   searchTerm: filterRequest.searchTerm,
-    //   sortColumn: filterRequest.sortColumn,
-    //   sortOrder: filterRequest.sortOrder,
-    //   page: filterRequest.page,
-    //   pageSize: filterRequest.pageSize,
-    // });
-    console.log('res', res);
+    const res = await FilterRequest(filterRequest);
+
+    console.log("res", res);
     setUser(res.data.data);
     setTotalCount(res.data.totalCount);
   };
@@ -76,13 +70,12 @@ const ManageUserPage = () => {
     setFilterRequest((prev) => {
       let newSortOrder;
       if (prev.sortColumn === e) {
-        // Toggle the sort order
         newSortOrder =
           prev.sortOrder === "descend"
             ? "asc"
             : prev.sortOrder === "asc"
-              ? ""
-              : "descend";
+            ? ""
+            : "descend";
       } else {
         // Set to descending if switching columns
         newSortOrder = "";
@@ -109,7 +102,7 @@ const ManageUserPage = () => {
     return null;
   };
   return (
-    <Layout title=" > Manage User">
+    <>
       <Paper
         elevation={3}
         style={{
@@ -311,7 +304,7 @@ const ManageUserPage = () => {
           />
         </Box>
       </Paper>
-    </Layout>
+    </>
   );
 };
 
