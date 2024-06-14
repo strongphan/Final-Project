@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -6,17 +7,21 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
+  InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 import { AppRouter } from "../routes/AppRouter";
 import Footer from "./Footer";
 import Header from "./Header";
-import VerticalNavbar from "./VerticalNavbar";
+import VerticalNavbarAdmin from "./VerticalNavbarAdmin";
+import VerticalNavbarStaff from "./VerticalNavbarStaff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const Layout = ({ children }) => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
@@ -24,7 +29,10 @@ const Layout = ({ children }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [validationError, setValidationError] = useState("");
   const [cValidationError, setCValidationError] = useState("");
-  const [showSuccessDialog, setShowSuccessDialog] = useState(false); // New state for success dialog
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [capsLockOn, setCapsLockOn] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false); // State for showing/hiding new password
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for showing/hiding confirm password
   const { currentUser, isAuthenticated, setIsAuthenticated } = useAuthContext();
   const navigate = useNavigate();
 
@@ -48,9 +56,13 @@ const Layout = ({ children }) => {
     const oldPassword = localStorage.getItem("password");
     const newPasswordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
-    if (newPassword === oldPassword || !newPasswordRegex.test(newPassword)) {
+    if (newPassword === oldPassword) {
+      setValidationError("New password must be different from the old password.");
+      return;
+    }
+    if (!newPasswordRegex.test(newPassword)) {
       setValidationError(
-        "New password must be 8-16 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character. It must also be different from the old password."
+        "New password must be 8-16 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character."
       );
       return;
     }
@@ -60,7 +72,7 @@ const Layout = ({ children }) => {
       if (token) {
         const userId = currentUser.id;
         const response1 = await axios.post(
-          "https://localhost:7083/api/users/change_password",
+          "http://localhost:7083/api/users/change_password",
           {
             id: userId,
             oldPassword: oldPassword,
@@ -72,7 +84,7 @@ const Layout = ({ children }) => {
         if (response1.data === true) {
           const username = currentUser.name;
           const response2 = await axios.post(
-            "https://localhost:7083/api/users/login",
+            "http://localhost:7083/api/users/login",
             { userName: username, password: newPassword }
           );
           const data = response2.data;
@@ -105,34 +117,51 @@ const Layout = ({ children }) => {
     const oldPassword = localStorage.getItem("password");
     if (!newPassword) {
       setValidationError("New password cannot be empty.");
-    } else if (newPassword === oldPassword) {
-      setValidationError(
-        "New password must be different from the old password."
-      );
-    } else {
-      const newPasswordRegex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
-      if (!newPasswordRegex.test(newPassword)) {
-        setValidationError(
-          "New password must be 8-16 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character."
-        );
-      }
     }
   };
+
   const handleConfirmPassword = () => {
     if (!confirmPassword) {
       setCValidationError("Confirm password cannot be empty.");
     } else if (confirmPassword !== newPassword) {
       setCValidationError("Passwords do not match. Please re-enter.");
-      return;
+    } else {
+      setCValidationError("");
     }
   };
+
+  const handleKeyDown = (event) => {
+    setCapsLockOn(event.getModifierState("CapsLock"));
+    if ((newPassword || confirmPassword) && event.getModifierState("CapsLock")) {
+      setValidationError(
+        "Caps Lock is on. Please check if you're unintentionally using uppercase letters."
+      );
+    } else {
+      setValidationError("");
+    }
+  };
+
+  const toggleNewPasswordVisibility = () => {
+    setShowNewPassword(!showNewPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <div>
       <CssBaseline />
       <Header />
       <Box display="flex" p={2}>
-        <Box>{isAuthenticated && <VerticalNavbar />}</Box>
+        <Box>
+          {isAuthenticated &&
+            (currentUser.role === "Admin" ? (
+              <VerticalNavbarAdmin />
+            ) : (
+              <VerticalNavbarStaff />
+            ))}
+        </Box>
         <Box flexGrow={1} ml={2}>
           <main style={{ p: "2" }}>
             <AppRouter />
@@ -158,12 +187,22 @@ const Layout = ({ children }) => {
               autoFocus
               margin="dense"
               label="New Password"
-              type="password"
+              type={showNewPassword ? "text" : "password"} // Toggle visibility based on showNewPassword state
               fullWidth
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               onBlur={handlePasswordBlur}
               required
+              onKeyDown={handleKeyDown}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleNewPasswordVisibility}>
+                      {showNewPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
               sx={{
                 "& label.Mui-focused": { color: "#000" },
                 "& .MuiOutlinedInput-root": {
@@ -181,17 +220,37 @@ const Layout = ({ children }) => {
             <TextField
               margin="dense"
               label="Confirm Password"
-              type="password"
+              type={showConfirmPassword ? "text" : "password"} // Toggle visibility based on showConfirmPassword state
               fullWidth
               required
               value={confirmPassword}
-              onBlur={handleConfirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              onBlur={handleConfirmPassword}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleConfirmPasswordVisibility}>
+                      {showConfirmPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                "& label.Mui-focused": { color: "#000" },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#000" },
+                },
+              }}
             />
           </Box>
           {cValidationError && (
             <Typography color="error" variant="caption" component="div">
               {cValidationError}
+            </Typography>
+          )}
+          {capsLockOn && (
+            <Typography color="error" variant="caption" component="div">
+              *Caps Lock is on. Please check if you're unintentionally using uppercase letters.
             </Typography>
           )}
         </DialogContent>
@@ -220,7 +279,7 @@ const Layout = ({ children }) => {
         <DialogActions>
           <Button
             onClick={() => setShowSuccessDialog(false)}
-            sx={{ bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}
+            sx={{ color: "white", bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}
           >
             OK
           </Button>

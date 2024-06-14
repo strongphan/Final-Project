@@ -33,7 +33,7 @@ const LoginPage = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "https://localhost:7083/api/users/login",
+        "http://localhost:7083/api/users/login",
         { username, password }
       );
       const data = response.data;
