@@ -27,10 +27,9 @@ const Layout = ({ children }) => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [validationError, setValidationError] = useState("");
-  const [cValidationError, setCValidationError] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  const [capsLockOn, setCapsLockOn] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { currentUser, isAuthenticated, setIsAuthenticated } = useAuthContext();
@@ -57,13 +56,13 @@ const Layout = ({ children }) => {
     const newPasswordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
     if (newPassword === oldPassword) {
-      setValidationError(
+      setNewPasswordError(
         "New password must be different from the old password."
       );
       return;
     }
     if (!newPasswordRegex.test(newPassword)) {
-      setValidationError(
+      setNewPasswordError(
         "New password must be 8-16 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character."
       );
       return;
@@ -100,49 +99,34 @@ const Layout = ({ children }) => {
           setShowSuccessDialog(true);
           localStorage.removeItem("password");
         } else {
-          setValidationError("Failed to change password. Please try again.");
+          setNewPasswordError("Failed to change password. Please try again.");
         }
       } else {
-        setValidationError("User token not found. Please login again.");
+        setNewPasswordError("User token not found. Please login again.");
         navigate("/");
       }
     } catch (error) {
       console.error("Error:", error);
-      setValidationError(
+      setNewPasswordError(
         "An error occurred while changing password. Please try again later."
       );
     }
   };
 
   const handlePasswordBlur = () => {
-    setValidationError("");
+    setNewPasswordError("");
     const oldPassword = localStorage.getItem("password");
     if (!newPassword) {
-      setValidationError("New password cannot be empty.");
+      setNewPasswordError("New password cannot be empty.");
     }
   };
 
   const handleConfirmPassword = () => {
+    setConfirmPasswordError("");
     if (!confirmPassword) {
-      setCValidationError("Confirm password cannot be empty.");
+      setConfirmPasswordError("Confirm password cannot be empty.");
     } else if (confirmPassword !== newPassword) {
-      setCValidationError("Passwords do not match. Please re-enter.");
-    } else {
-      setCValidationError("");
-    }
-  };
-
-  const handleKeyDown = (event) => {
-    setCapsLockOn(event.getModifierState("CapsLock"));
-    if (
-      (newPassword || confirmPassword) &&
-      event.getModifierState("CapsLock")
-    ) {
-      setValidationError(
-        "Caps Lock is on. Please check if you're unintentionally using uppercase letters."
-      );
-    } else {
-      setValidationError("");
+      setConfirmPasswordError("Passwords do not match. Please re-enter.");
     }
   };
 
@@ -158,9 +142,7 @@ const Layout = ({ children }) => {
     <div>
       <CssBaseline />
       <Header />
-      <Box
-        display="flex"
-        p={2}>
+      <Box display="flex" p={2}>
         <Box>
           {isAuthenticated &&
             (currentUser.role === "Admin" ? (
@@ -169,9 +151,7 @@ const Layout = ({ children }) => {
               <VerticalNavbarStaff />
             ))}
         </Box>
-        <Box
-          flexGrow={1}
-          ml={2}>
+        <Box flexGrow={1} ml={2}>
           <main style={{ p: "2" }}>
             <AppRouter />
           </main>
@@ -180,10 +160,11 @@ const Layout = ({ children }) => {
       <Footer />
 
       <Dialog
-        open={currentUser.isFirst && showLogoutDialog}
+        open={currentUser.isFirst}
         onClose={handleCloseDialog}
         disableBackdropClick
-        disableEscapeKeyDown>
+        disableEscapeKeyDown
+      >
         <DialogTitle sx={{ color: "#D6001C" }}>Change Password</DialogTitle>
         <DialogContent>
           <Typography>
@@ -198,10 +179,9 @@ const Layout = ({ children }) => {
               type={showNewPassword ? "text" : "password"}
               fullWidth
               value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              onChange={(e) => setNewPassword(e.target.value.trim())}
               onBlur={handlePasswordBlur}
               required
-              onKeyDown={handleKeyDown}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -222,15 +202,12 @@ const Layout = ({ children }) => {
                 },
               }}
             />
+            {newPasswordError && (
+              <Typography color="error" variant="caption" component="div">
+                {newPasswordError}
+              </Typography>
+            )}
           </Box>
-          {validationError && (
-            <Typography
-              color="error"
-              variant="caption"
-              component="div">
-              {validationError}
-            </Typography>
-          )}
           <Box mt={2}>
             <TextField
               margin="dense"
@@ -239,7 +216,7 @@ const Layout = ({ children }) => {
               fullWidth
               required
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) => setConfirmPassword(e.target.value.trim())}
               onBlur={handleConfirmPassword}
               InputProps={{
                 endAdornment: (
@@ -261,31 +238,22 @@ const Layout = ({ children }) => {
                 },
               }}
             />
+            {confirmPasswordError && (
+              <Typography color="error" variant="caption" component="div">
+                {confirmPasswordError}
+              </Typography>
+            )}
           </Box>
-          {cValidationError && (
-            <Typography
-              color="error"
-              variant="caption"
-              component="div">
-              {cValidationError}
-            </Typography>
-          )}
-          {capsLockOn && (
-            <Typography
-              color="error"
-              variant="caption"
-              component="div">
-              *Caps Lock is on. Please check if you're unintentionally using
-              uppercase letters.
-            </Typography>
-          )}
         </DialogContent>
         <DialogActions>
           <Button
-            disabled={!!validationError || !!cValidationError}
+            disabled={!!newPasswordError || !!confirmPasswordError}
             onClick={handlePasswordChange}
             variant="contained"
-            sx={{ bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}>
+            sx={{ bgcolor: "#D6001C",
+              "&:hover": { bgcolor: "#D6001C" },
+            }}
+          >
             Save
           </Button>
         </DialogActions>
@@ -295,8 +263,9 @@ const Layout = ({ children }) => {
         open={showSuccessDialog}
         onClose={() => setShowSuccessDialog(false)}
         disableBackdropClick
-        disableEscapeKeyDown>
-        <DialogTitle>Success</DialogTitle>
+        disableEscapeKeyDown
+      >
+        <DialogTitle sx={{ color: "#D6001C", fontWeight: "bold" }}>Success</DialogTitle>
         <DialogContent>
           <Typography>Password changed successfully.</Typography>
         </DialogContent>
@@ -307,7 +276,8 @@ const Layout = ({ children }) => {
               color: "white",
               bgcolor: "#D6001C",
               "&:hover": { bgcolor: "#D6001C" },
-            }}>
+            }}
+          >
             OK
           </Button>
         </DialogActions>
