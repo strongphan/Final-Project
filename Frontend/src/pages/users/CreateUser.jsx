@@ -23,9 +23,12 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useAuthContext } from "../../context/AuthContext";
+import { removeExtraWhitespace } from "../../utils/TrimValue";
+
 const CreateUser = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuthContext();
+  const [error, setError] = useState("");
   const [users, setUsers] = useState({
     firstName: "",
     lastName: "",
@@ -33,7 +36,7 @@ const CreateUser = () => {
     gender: 1,
     joinedDate: null,
     type: 0,
-    location: currentUser.locality,
+    location: localStorage.getItem("location"),
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -52,7 +55,6 @@ const CreateUser = () => {
   });
 
   const handleChange = (event) => {
-    console.log("dadasdasd");
     const { name, value } = event.target;
     setUsers({ ...users, [name]: value });
     const isValid = /^[a-zA-Z]{2,20}$/.test(value);
@@ -105,6 +107,37 @@ const CreateUser = () => {
 
   const handleTypeChange = (event) => {
     const { name, value } = event.target;
+    //type staff: set as admin
+    if (value === 0) {
+      setUsers({
+        ...users,
+        [name]: value,
+        location: localStorage.getItem("location"),
+      });
+    } else {
+      setUsers({ ...users, [name]: value });
+    }
+  };
+  const handleGenderChange = (event) => {
+    const { name, value } = event.target;
+    setUsers({ ...users, [name]: value });
+  };
+
+  const handleNameChange = (event) => {
+    let errorMessage = "";
+    const { name, value } = event.target;
+    setUsers({ ...users, [name]: value });
+    if (users.firstName && name === "firstName") {
+      const isValid = /^[a-zA-Z]{2,20}$/.test(value);
+      if (!isValid) {
+        errorMessage = `First name must contain only alphabetical characters.`;
+        setFormErrors({ ...formErrors, [name]: errorMessage });
+      }
+    }
+  };
+
+  const handleLocationChange = (event) => {
+    const { name, value } = event.target;
     setUsers({ ...users, [name]: value });
   };
 
@@ -122,6 +155,25 @@ const CreateUser = () => {
     const day = date?.getDay();
     return day === 6 || day === 0;
   };
+
+  function isValidDate(dateString) {
+    console.log("dateString: " + users.joinedDate);
+    const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+    if (!regex.test(dateString)) {
+      return false;
+    }
+    const parts = dateString.split("/");
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+    const year = parseInt(parts[2], 10);
+
+    if (month < 1 || month > 12 || year < 1000 || year > 9999) {
+      return false;
+    }
+
+    const daysInMonth = new Date(year, month, 0).getDate();
+    return day > 0 && day <= daysInMonth;
+  }
 
   useEffect(() => {
     let errorMessage = "";
@@ -166,7 +218,6 @@ const CreateUser = () => {
   }, [users.dateOfBirth]);
 
   const handleSubmit = async (event) => {
-    console.log("location : ", currentUser.locality);
     event.preventDefault();
     const hasErrors = Object.values(formErrors).some((error) => error);
     if (!hasErrors) {
@@ -182,7 +233,7 @@ const CreateUser = () => {
         if (users.gender) {
           users.gender = +users.gender;
         }
-        const response = await axios.post("https://localhost:7083/api/users", {
+        const response = await axios.post("http://localhost:7083/api/users", {
           ...users,
           dateOfBirth: users.dateOfBirth ? formatDate(users.dateOfBirth) : null,
           joinedDate: users.joinedDate ? formatDate(users.joinedDate) : null,
@@ -223,12 +274,18 @@ const CreateUser = () => {
               </Grid>
               <Grid item xs={9}>
                 <TextField
+                  sx={{
+                    "& label.Mui-focused": { color: "#000" },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused fieldset": { borderColor: "#000" },
+                    },
+                  }}
                   placeholder="First Name"
                   onBlur={handleChange}
                   fullWidth
                   name="firstName"
                   value={users.firstName}
-                  onChange={handleChange}
+                  onChange={handleNameChange}
                   margin="dense"
                   error={formErrors.firstName}
                 />
@@ -244,15 +301,18 @@ const CreateUser = () => {
               </Grid>
               <Grid item xs={9}>
                 <TextField
+                  sx={{
+                    "& label.Mui-focused": { color: "#000" },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused fieldset": { borderColor: "#000" },
+                    },
+                  }}
                   placeholder="Last Name"
                   fullWidth
                   name="lastName"
                   value={users.lastName}
                   onBlur={handleLastNameChange}
                   onChange={handleLastNameChange}
-                  margin="dense"
-                  required
-                  error={formErrors.lastName}
                 />
                 {formErrors.lastName && (
                   <FormHelperText error>{formErrors.lastName}</FormHelperText>
@@ -267,6 +327,18 @@ const CreateUser = () => {
               <Grid item xs={9}>
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={vi}>
                   <DatePicker
+                    onError={(newError) => setError(newError)}
+                    slotProps={{
+                      textField: {
+                        helperText: error,
+                      },
+                    }}
+                    sx={{
+                      "& label.Mui-focused": { color: "#000" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": { borderColor: "#000" },
+                      },
+                    }}
                     format="dd/MM/yyyy"
                     label="Date Of Birth"
                     value={users.dateOfBirth}
@@ -297,7 +369,7 @@ const CreateUser = () => {
                 <RadioGroup
                   name="gender"
                   value={users.gender}
-                  onChange={handleTypeChange}
+                  onChange={handleGenderChange}
                   row
                 >
                   <FormControlLabel
@@ -305,7 +377,7 @@ const CreateUser = () => {
                     control={
                       <Radio
                         sx={{
-                          color: "#d32f2f",
+                          color: "#000",
                           "&.Mui-checked": { color: "#d32f2f" },
                         }}
                       />
@@ -317,7 +389,7 @@ const CreateUser = () => {
                     control={
                       <Radio
                         sx={{
-                          color: "#d32f2f",
+                          color: "#000",
                           "&.Mui-checked": { color: "#d32f2f" },
                         }}
                       />
@@ -335,6 +407,18 @@ const CreateUser = () => {
               <Grid item xs={9}>
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={vi}>
                   <DatePicker
+                    onError={(newError) => setError(newError)}
+                    slotProps={{
+                      textField: {
+                        helperText: error,
+                      },
+                    }}
+                    sx={{
+                      "& label.Mui-focused": { color: "#000" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": { borderColor: "#000" },
+                      },
+                    }}
                     format="dd/MM/yyyy"
                     label="Joined Date"
                     value={users.joinedDate}
@@ -366,6 +450,12 @@ const CreateUser = () => {
                   margin="dense"
                   required
                   error={formErrors.type}
+                  sx={{
+                    "& label.Mui-focused": { color: "#000" },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused fieldset": { borderColor: "#000" },
+                    },
+                  }}
                 >
                   <InputLabel id="type-label">Type</InputLabel>
                   <Select
@@ -395,15 +485,21 @@ const CreateUser = () => {
                   margin="dense"
                   required
                   error={formErrors.location}
+                  sx={{
+                    "& label.Mui-focused": { color: "#000" },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused fieldset": { borderColor: "#000" },
+                    },
+                  }}
                 >
                   <InputLabel id="location-label">Location</InputLabel>
                   <Select
                     labelId="location-label"
                     name="location"
                     value={users.location}
-                    onChange={handleChange}
+                    onChange={handleLocationChange}
                     label="Location"
-                    readOnly={users.type === 0}
+                    disabled={users.type === 0}
                   >
                     <MenuItem value="HaNoi">Ha Noi</MenuItem>
                     <MenuItem value="HCM">Ho Chi Minh</MenuItem>

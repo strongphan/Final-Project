@@ -20,7 +20,9 @@ const AuthProvider = ({ children }) => {
     role: "",
     locality: "",
   });
+
   useEffect(() => {
+    console.log("into auth context")
     const UserData = () => {
       if (token) {
         try {
@@ -41,6 +43,9 @@ const AuthProvider = ({ children }) => {
               ],
             isFirst: decodedToken.FirstLogin === "True",
           });
+          localStorage.setItem("location",              decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/locality"
+          ] );
         } catch (error) {
           console.error("Error decoding token: ", error);
           setIsAuthenticated(false);
