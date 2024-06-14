@@ -63,7 +63,7 @@ const ManageUserPage = () => {
   //Search state to set in filter request after entered
   const [searchTerm, setSearchTerm] = useState("");
   const handleSearchChange = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setSearchTerm(e.target.value);
   };
   const handleKeyPress = (e) => {
