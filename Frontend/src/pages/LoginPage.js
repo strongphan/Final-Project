@@ -23,7 +23,6 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [isCapsLockOn, setIsCapsLockOn] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -40,6 +39,7 @@ const LoginPage = () => {
       if (data.flag) {
         setIsAuthenticated(true);
         localStorage.setItem("token", data.token);
+        if (data.i)
         localStorage.setItem("password", password);
         navigate("/");
       } else {
@@ -61,10 +61,6 @@ const LoginPage = () => {
     } else {
       setError("");
     }
-  };
-
-  const handleKeyDown = (event) => {
-    setIsCapsLockOn(event.getModifierState("CapsLock"));
   };
 
   const togglePasswordVisibility = () => {
@@ -143,7 +139,6 @@ const LoginPage = () => {
               }
               error={!!passwordError}
               helperText={passwordError}
-              onKeyDown={handleKeyDown}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -169,13 +164,6 @@ const LoginPage = () => {
                 },
               }}
             />
-            {isCapsLockOn && (
-              <Typography
-                variant="caption"
-                color="error">
-                *Caps Lock is on.
-              </Typography>
-            )}
             <Button
               type="submit"
               variant="contained"
