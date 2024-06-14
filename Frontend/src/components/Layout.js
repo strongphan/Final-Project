@@ -266,7 +266,9 @@ const Layout = ({ children }) => {
         disableBackdropClick
         disableEscapeKeyDown
       >
-        <DialogTitle sx={{ color: "#D6001C", fontWeight: "bold" }}>Success</DialogTitle>
+        <DialogTitle sx={{ color: "#D6001C", fontWeight: "bold" }}>
+          Success
+        </DialogTitle>
         <DialogContent>
           <Typography>Password changed successfully.</Typography>
         </DialogContent>

@@ -23,12 +23,12 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useAuthContext } from "../../context/AuthContext";
-import {removeExtraWhitespace} from "../../utils/TrimValue";
+import { removeExtraWhitespace } from "../../utils/TrimValue";
 
 const CreateUser = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuthContext();
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [users, setUsers] = useState({
     firstName: "",
     lastName: "",
@@ -36,7 +36,7 @@ const CreateUser = () => {
     gender: 1,
     joinedDate: null,
     type: 0,
-    location: localStorage.getItem('location'),
+    location: localStorage.getItem("location"),
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -59,13 +59,19 @@ const CreateUser = () => {
 
     let errorMessage = "";
     if (value.trim() === "") {
-      errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } is required`;
     } else if (value.length < 2) {
-      errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} must be at least 2 characters long.`;
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } must be at least 2 characters long.`;
     } else if (value.length > 20) {
-      errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} must not exceed 20 characters.`;
-    } 
-    
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } must not exceed 20 characters.`;
+    }
+
     value = removeExtraWhitespace(value);
     setUsers({ ...users, [name]: value });
     setFormErrors({ ...formErrors, [name]: errorMessage });
@@ -82,12 +88,11 @@ const CreateUser = () => {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
       } is required`;
-    } else if (trimmedValue.length < 2 ) {
+    } else if (trimmedValue.length < 2) {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
       } must be at least 2 characters long.`;
-    }
-    else if ( trimmedValue.length > 20) {
+    } else if (trimmedValue.length > 20) {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
       } must not exceed 20 characters.`;
@@ -99,12 +104,15 @@ const CreateUser = () => {
   const handleTypeChange = (event) => {
     const { name, value } = event.target;
     //type staff: set as admin
-    if(value === 0){
-      setUsers({...users,[name]: value, location: localStorage.getItem('location') });
-    }
-    else {
+    if (value === 0) {
+      setUsers({
+        ...users,
+        [name]: value,
+        location: localStorage.getItem("location"),
+      });
+    } else {
       setUsers({ ...users, [name]: value });
-    } 
+    }
   };
   const handleGenderChange = (event) => {
     const { name, value } = event.target;
@@ -124,27 +132,25 @@ const CreateUser = () => {
   //     }
   //   }  };
   const handleNameChange = (event) => {
-    let errorMessage = '';
+    let errorMessage = "";
     const { name, value } = event.target;
-    const trimmedValue = value.replace(/[^a-zA-Z]/g, ''); // Remove all non-alphabetical characters
-  
+    const trimmedValue = value.replace(/[^a-zA-Z]/g, ""); // Remove all non-alphabetical characters
+
     setUsers({ ...users, [name]: trimmedValue });
-  
-    if(name === 'firstName' ){
+
+    if (name === "firstName") {
       const isValid = /^[a-zA-Z]{2,20}$/.test(trimmedValue);
-      if(!isValid){
+      if (!isValid) {
         errorMessage = `First name must contain only alphabetical characters.`;
       }
     }
-  
+
     setFormErrors({ ...formErrors, [name]: errorMessage });
   };
-  
-
 
   const handleLocationChange = (event) => {
     const { name, value } = event.target;
-    setUsers({...users, [name]: value });
+    setUsers({ ...users, [name]: value });
   };
 
   const handleDateChange = (name, date) => {
@@ -159,16 +165,16 @@ const CreateUser = () => {
 
   const isWeekend = (date) => {
     const day = date?.getDay();
-    return day === 6 || day === 0; 
+    return day === 6 || day === 0;
   };
 
   function isValidDate(dateString) {
-    console.log("dateString: "+ users.joinedDate);
+    console.log("dateString: " + users.joinedDate);
     const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
     if (!regex.test(dateString)) {
       return false;
     }
-    const parts = dateString.split('/');
+    const parts = dateString.split("/");
     const day = parseInt(parts[0], 10);
     const month = parseInt(parts[1], 10);
     const year = parseInt(parts[2], 10);
@@ -176,26 +182,28 @@ const CreateUser = () => {
     if (month < 1 || month > 12 || year < 1000 || year > 9999) {
       return false;
     }
-  
+
     const daysInMonth = new Date(year, month, 0).getDate();
     return day > 0 && day <= daysInMonth;
   }
-  
+
   useEffect(() => {
     let errorMessage = "";
     if (touched.joinedDate) {
-        const joined = new Date(users.joinedDate);
-        const dob = new Date(users.dateOfBirth);
+      const joined = new Date(users.joinedDate);
+      const dob = new Date(users.dateOfBirth);
 
-        if (dob && joined < dob) {
-          errorMessage = "Joined date must be after date of birth.";
-        } else if (isWeekend(joined)) {
-          errorMessage = "Joined date must not be on a weekend.";
-        }
-    
+      if (dob && joined < dob) {
+        errorMessage = "Joined date must be after date of birth.";
+      } else if (isWeekend(joined)) {
+        errorMessage = "Joined date must not be on a weekend.";
+      }
     }
 
-    setFormErrors((prevErrors) => ({ ...prevErrors, joinedDate: errorMessage }));
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      joinedDate: errorMessage,
+    }));
   }, [users.joinedDate, users.dateOfBirth, touched.joinedDate]);
 
   const errorMessage = React.useMemo(() => {
@@ -205,36 +213,38 @@ const CreateUser = () => {
       //   return 'Date of birth must less than current day.';
       // }
 
-      case 'invalidDate': {
-        return 'Invalid Date';
+      case "invalidDate": {
+        return "Invalid Date";
       }
 
       default: {
-        return '';
+        return "";
       }
     }
   }, [error]);
-
 
   useEffect(() => {
     let errorMessage = "";
     if (touched.dateOfBirth) {
       // if (!users.dateOfBirth) {
       //   errorMessage = "Date of birth is required.";
-      // } 
-       
-        const dob = new Date(users.dateOfBirth);
-        const age = Math.floor((Date.now() - dob) / (365.25 * 24 * 60 * 60 * 1000));
+      // }
 
-        if (age < 18) {
-          errorMessage = "User is under 18. Please select a different date.";
-        }
-      
+      const dob = new Date(users.dateOfBirth);
+      const age = Math.floor(
+        (Date.now() - dob) / (365.25 * 24 * 60 * 60 * 1000)
+      );
+
+      if (age < 18) {
+        errorMessage = "User is under 18. Please select a different date.";
+      }
     }
 
-    setFormErrors((prevErrors) => ({ ...prevErrors, dateOfBirth: errorMessage }));
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      dateOfBirth: errorMessage,
+    }));
   }, [users.dateOfBirth, touched.dateOfBirth]);
-  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -291,14 +301,14 @@ const CreateUser = () => {
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
                 </Typography>
               </Grid>
-              <Grid item xs={9} >
+              <Grid item xs={9}>
                 <TextField
-              sx={{
-                "& label.Mui-focused": { color: "#000" },
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": { borderColor: "#000" },
-                },
-              }}
+                  sx={{
+                    "& label.Mui-focused": { color: "#000" },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused fieldset": { borderColor: "#000" },
+                    },
+                  }}
                   placeholder="First Name"
                   onBlur={handleChange}
                   fullWidth
@@ -320,12 +330,12 @@ const CreateUser = () => {
               </Grid>
               <Grid item xs={9}>
                 <TextField
-                              sx={{
-                                "& label.Mui-focused": { color: "#000" },
-                                "& .MuiOutlinedInput-root": {
-                                  "&.Mui-focused fieldset": { borderColor: "#000" },
-                                },
-                              }}
+                  sx={{
+                    "& label.Mui-focused": { color: "#000" },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused fieldset": { borderColor: "#000" },
+                    },
+                  }}
                   placeholder="Last Name"
                   fullWidth
                   name="lastName"
@@ -352,12 +362,12 @@ const CreateUser = () => {
                         helperText: errorMessage,
                       },
                     }}
-                                sx={{
-                                  "& label.Mui-focused": { color: "#000" },
-                                  "& .MuiOutlinedInput-root": {
-                                    "&.Mui-focused fieldset": { borderColor: "#000" },
-                                  },
-                                }}
+                    sx={{
+                      "& label.Mui-focused": { color: "#000" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": { borderColor: "#000" },
+                      },
+                    }}
                     format="dd/MM/yyyy"
                     label="Date Of Birth"
                     value={users.dateOfBirth}
@@ -373,7 +383,9 @@ const CreateUser = () => {
                   />
                 </LocalizationProvider>
                 {formErrors.dateOfBirth && (
-                  <FormHelperText error>{formErrors.dateOfBirth}</FormHelperText>
+                  <FormHelperText error>
+                    {formErrors.dateOfBirth}
+                  </FormHelperText>
                 )}
               </Grid>
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
@@ -424,18 +436,18 @@ const CreateUser = () => {
               <Grid item xs={9}>
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={vi}>
                   <DatePicker
-                  onError={(newError) => setError(newError)}
+                    onError={(newError) => setError(newError)}
                     slotProps={{
                       textField: {
                         helperText: errorMessage,
                       },
                     }}
-                                                  sx={{
-                                                    "& label.Mui-focused": { color: "#000" },
-                                                    "& .MuiOutlinedInput-root": {
-                                                      "&.Mui-focused fieldset": { borderColor: "#000" },
-                                                    },
-                                                  }}
+                    sx={{
+                      "& label.Mui-focused": { color: "#000" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": { borderColor: "#000" },
+                      },
+                    }}
                     format="dd/MM/yyyy"
                     label="Joined Date"
                     value={users.joinedDate}
@@ -476,7 +488,6 @@ const CreateUser = () => {
                 >
                   <InputLabel id="type-label">Type</InputLabel>
                   <Select
-
                     labelId="type-label"
                     name="type"
                     value={users.type}

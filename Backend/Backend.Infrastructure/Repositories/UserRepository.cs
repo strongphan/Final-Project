@@ -41,7 +41,7 @@ namespace Backend.Infrastructure.Repository
 
             if (!string.IsNullOrWhiteSpace(request.Type))
             {
-                if(request.Type == "Admin")
+                if (request.Type == "Admin")
                 {
                     query = query.Where(p => p.Type == Role.Admin);
                 }

@@ -1,4 +1,11 @@
-import { ArrowDropDown, ArrowDropUp, CancelTwoTone, CreateTwoTone, DisabledByDefaultTwoTone, Search } from "@mui/icons-material";
+import {
+  ArrowDropDown,
+  ArrowDropUp,
+  CancelTwoTone,
+  CreateTwoTone,
+  DisabledByDefaultTwoTone,
+  Search,
+} from "@mui/icons-material";
 import { Sheet } from "@mui/joy";
 import {
   Box,
@@ -24,7 +31,7 @@ import {
   TableRow,
   TextField,
   Typography,
-  styled
+  styled,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
@@ -39,18 +46,18 @@ const formatDate = (dateString) => {
 
 // custom style background when hover user
 const CustomTableRow = styled(TableRow)(({ theme }) => ({
-  '&:hover': {
+  "&:hover": {
     backgroundColor: theme.palette.action.hover,
-    cursor: 'pointer'
+    cursor: "pointer",
   },
 }));
 
 // Enum for gender
 const GenderEnum = {
-  0: 'Unknown',
-  1: 'Male',
-  2: 'Female',
-  3: 'Other',
+  0: "Unknown",
+  1: "Male",
+  2: "Female",
+  3: "Other",
 };
 
 const ManageUserPage = () => {
@@ -101,10 +108,10 @@ const ManageUserPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const handleDetailDialog = async (user) => {
-    const res = await GetDetailedUser(user.id)
+    const res = await GetDetailedUser(user.id);
     setSelectedUser(res);
     setDialogOpen(true);
-  }
+  };
   const handleDialogClose = () => {
     setDialogOpen(false);
     setSelectedUser(null);
@@ -118,7 +125,7 @@ const ManageUserPage = () => {
       sortColumn: "name",
       sortOrder: "",
       page: 1,
-      pageSize: "20"
+      pageSize: "20",
     }));
   };
   const handlePageChange = (e, value) => {
@@ -147,7 +154,6 @@ const ManageUserPage = () => {
           newSortColumn = column;
         }
       } else {
-
         newSortOrder = "descend";
         newSortColumn = column;
       }
@@ -160,17 +166,32 @@ const ManageUserPage = () => {
     });
   };
 
-
   const getSortIcon = (column) => {
     if (filterRequest.sortColumn === column) {
       if (filterRequest.sortOrder === "descend") {
-        return <> <ArrowDropDown /> <ArrowDropUp sx={{ color: "#bdbdbd" }} /> </>
+        return (
+          <>
+            {" "}
+            <ArrowDropDown /> <ArrowDropUp sx={{ color: "#bdbdbd" }} />{" "}
+          </>
+        );
       }
       if (filterRequest.sortOrder === "") {
-        return <> <ArrowDropDown sx={{ color: "#bdbdbd" }} /> <ArrowDropUp /> </>
+        return (
+          <>
+            {" "}
+            <ArrowDropDown sx={{ color: "#bdbdbd" }} /> <ArrowDropUp />{" "}
+          </>
+        );
       }
     } else
-      return <> <ArrowDropDown sx={{ color: "#bdbdbd" }} /> <ArrowDropUp sx={{ color: "#bdbdbd" }} /> </>;
+      return (
+        <>
+          {" "}
+          <ArrowDropDown sx={{ color: "#bdbdbd" }} />{" "}
+          <ArrowDropUp sx={{ color: "#bdbdbd" }} />{" "}
+        </>
+      );
   };
   return (
     <>
@@ -181,40 +202,40 @@ const ManageUserPage = () => {
           marginLeft: "100px",
           width: "1200px",
           height: "calc(100vh - 150px)",
-        }}>
+        }}
+      >
         <h3 style={{ color: "#D6001C" }}>User List</h3>
         <Box
-          sx={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
-          <FormControl
-            variant="outlined"
-            sx={{ minWidth: 120 }}>
+          sx={{ display: "flex", alignItems: "center", marginBottom: "20px" }}
+        >
+          <FormControl variant="outlined" sx={{ minWidth: 120 }}>
             <InputLabel>Type</InputLabel>
             {console.log(filterRequest.type)}
-            <Select
-              label="Type"
-              value={filterRequest.type}
-              name="type"
-            >
+            <Select label="Type" value={filterRequest.type} name="type">
               <MenuItem
                 value="Admin"
                 onClick={() => handleTypeChange("Admin")}
                 sx={{
-                  backgroundColor: filterRequest.type === "Admin" ? 'gray' : 'inherit',
-                  '&:hover': {
-                    backgroundColor: 'lightgray'
-                  }
-                }}>
+                  backgroundColor:
+                    filterRequest.type === "Admin" ? "gray" : "inherit",
+                  "&:hover": {
+                    backgroundColor: "lightgray",
+                  },
+                }}
+              >
                 Admin
               </MenuItem>
               <MenuItem
                 value="Staff"
                 onClick={() => handleTypeChange("Staff")}
                 sx={{
-                  backgroundColor: filterRequest.type === "Staff" ? 'gray' : 'inherit',
-                  '&:hover': {
-                    backgroundColor: 'lightgray'
-                  }
-                }}>
+                  backgroundColor:
+                    filterRequest.type === "Staff" ? "gray" : "inherit",
+                  "&:hover": {
+                    backgroundColor: "lightgray",
+                  },
+                }}
+              >
                 Staff
               </MenuItem>
             </Select>
@@ -239,7 +260,8 @@ const ManageUserPage = () => {
           <Button
             variant="contained"
             sx={{ backgroundColor: "#D6001C", height: "56px" }}
-            onClick={() => navigate(path.userCreate)}>
+            onClick={() => navigate(path.userCreate)}
+          >
             Create new user
           </Button>
         </Box>
@@ -253,9 +275,10 @@ const ManageUserPage = () => {
                   top: 0,
                   zIndex: 1,
                   backgroundColor: "white",
-                }}>
+                }}
+              >
                 <TableRow>
-                  <TableCell sx={{ width: '150px' }}>
+                  <TableCell sx={{ width: "150px" }}>
                     <Button
                       variant="text"
                       onClick={() => handleHeaderClick("code")}
@@ -266,11 +289,12 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}>
+                      }}
+                    >
                       Staff Code
                     </Button>
                   </TableCell>
-                  <TableCell sx={{ width: '150px' }}>
+                  <TableCell sx={{ width: "150px" }}>
                     <Button
                       variant="text"
                       onClick={() => handleHeaderClick("name")}
@@ -281,17 +305,21 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}>
+                      }}
+                    >
                       Full Name
                     </Button>
                   </TableCell>
-                  <TableCell sx={{
-                    width: "150px", fontWeight: "bold",
-                    textTransform: "none",
-                    minWidth: "auto",
-                    color: "black",
-                    padding: "16px"
-                  }}>
+                  <TableCell
+                    sx={{
+                      width: "150px",
+                      fontWeight: "bold",
+                      textTransform: "none",
+                      minWidth: "auto",
+                      color: "black",
+                      padding: "16px",
+                    }}
+                  >
                     Username
                   </TableCell>
                   <TableCell sx={{ width: "150px" }}>
@@ -305,11 +333,12 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}>
+                      }}
+                    >
                       Joined Date
                     </Button>
                   </TableCell>
-                  <TableCell sx={{ width: '150px' }}>
+                  <TableCell sx={{ width: "150px" }}>
                     <Button
                       variant="text"
                       onClick={() => handleHeaderClick("type")}
@@ -320,49 +349,67 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}>
+                      }}
+                    >
                       Type
                     </Button>
                   </TableCell>
-                  <TableCell sx={{
-                    width: '150px', fontWeight: "bold",
-                    textTransform: "none",
-                    minWidth: "auto",
-                    color: "black",
-                    padding: '16px'
-                  }}>
-
-                  </TableCell>
+                  <TableCell
+                    sx={{
+                      width: "150px",
+                      fontWeight: "bold",
+                      textTransform: "none",
+                      minWidth: "auto",
+                      color: "black",
+                      padding: "16px",
+                    }}
+                  ></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {users.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} sx={{ color: "red", textAlign: "center", padding: "28px", fontWeight: "bold" }} >
+                    <TableCell
+                      colSpan={6}
+                      sx={{
+                        color: "red",
+                        textAlign: "center",
+                        padding: "28px",
+                        fontWeight: "bold",
+                      }}
+                    >
                       No user found
                     </TableCell>
                   </TableRow>
                 )}
                 {users.map((user, index) => (
-                  <CustomTableRow key={index} onClick={() => handleDetailDialog(user)} >
+                  <CustomTableRow
+                    key={index}
+                    onClick={() => handleDetailDialog(user)}
+                  >
                     <TableCell>{user.staffCode}</TableCell>
                     <TableCell>
                       {user.firstName + " " + user.lastName}
                     </TableCell>
                     <TableCell>{user.userName}</TableCell>
                     <TableCell>{formatDate(user.joinedDate)}</TableCell>
-                    <TableCell>{user.type === 0 ? 'Staff' : 'Admin'}</TableCell>
+                    <TableCell>{user.type === 0 ? "Staff" : "Admin"}</TableCell>
                     <TableCell>
-                      <IconButton onClick={(e) => {
-                        //Prevent showing popup
-                        e.stopPropagation()
-                      }}>
+                      <IconButton
+                        onClick={(e) => {
+                          //Prevent showing popup
+                          e.stopPropagation();
+                        }}
+                      >
                         <CreateTwoTone />
                       </IconButton>
-                      <IconButton sx={{ color: '#D6001C' }} onClick={(e) => {
-                        //Prevent showing popup
-                        e.stopPropagation()
-                      }}>
+                      <IconButton
+                        sx={{ color: "#D6001C" }}
+                        onClick={(e) => {
+                          //Prevent showing popup
+                          e.stopPropagation();
+                        }}
+                      >
                         <CancelTwoTone />
                       </IconButton>
                     </TableCell>
@@ -377,7 +424,8 @@ const ManageUserPage = () => {
             display: "flex",
             justifyContent: "flex-end",
             paddingTop: "10px",
-          }}>
+          }}
+        >
           <Pagination
             count={Math.ceil(totalCount / filterRequest.pageSize)}
             variant="outlined"
@@ -401,17 +449,17 @@ const ManageUserPage = () => {
       {selectedUser && (
         <Dialog open={dialogOpen} onClose={handleDialogClose}>
           <DialogTitle
-            sx={{ bgcolor: 'grey.300', color: '#D6001C', fontWeight: 'bold' }}
+            sx={{ bgcolor: "grey.300", color: "#D6001C", fontWeight: "bold" }}
           >
             Detailed Assignment Information
             <IconButton
               aria-label="close"
               onClick={handleDialogClose}
               sx={{
-                position: 'absolute',
+                position: "absolute",
                 right: 10,
                 top: 12,
-                color: '#D6001C'
+                color: "#D6001C",
               }}
             >
               <DisabledByDefaultTwoTone />
@@ -419,30 +467,82 @@ const ManageUserPage = () => {
           </DialogTitle>
           <DialogContent dividers>
             <Grid container spacing={2}>
-              <Grid item xs={4}><Typography variant="body1"><strong>Staff Code:</strong></Typography></Grid>
-              <Grid item xs={8}><Typography variant="body1">{selectedUser.staffCode}</Typography></Grid>
+              <Grid item xs={4}>
+                <Typography variant="body1">
+                  <strong>Staff Code:</strong>
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="body1">
+                  {selectedUser.staffCode}
+                </Typography>
+              </Grid>
 
-              <Grid item xs={4}><Typography variant="body1"><strong>Full Name:</strong></Typography></Grid>
-              <Grid item xs={8}><Typography variant="body1">{`${selectedUser.firstName} ${selectedUser.lastName}`}</Typography></Grid>
+              <Grid item xs={4}>
+                <Typography variant="body1">
+                  <strong>Full Name:</strong>
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="body1">{`${selectedUser.firstName} ${selectedUser.lastName}`}</Typography>
+              </Grid>
 
-              <Grid item xs={4}><Typography variant="body1"><strong>Username:</strong></Typography></Grid>
-              <Grid item xs={8}><Typography variant="body1">{selectedUser.userName}</Typography></Grid>
+              <Grid item xs={4}>
+                <Typography variant="body1">
+                  <strong>Username:</strong>
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="body1">{selectedUser.userName}</Typography>
+              </Grid>
 
-              <Grid item xs={4}><Typography variant="body1"><strong>Date of Birth:</strong></Typography></Grid>
-              <Grid item xs={8}><Typography variant="body1">{formatDate(selectedUser.dateOfBirth)}</Typography></Grid>
+              <Grid item xs={4}>
+                <Typography variant="body1">
+                  <strong>Date of Birth:</strong>
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="body1">
+                  {formatDate(selectedUser.dateOfBirth)}
+                </Typography>
+              </Grid>
 
-              <Grid item xs={4}><Typography variant="body1"><strong>Gender:</strong></Typography></Grid>
-              <Grid item xs={8}><Typography variant="body1">{GenderEnum[selectedUser.gender]}</Typography></Grid>
+              <Grid item xs={4}>
+                <Typography variant="body1">
+                  <strong>Gender:</strong>
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="body1">
+                  {GenderEnum[selectedUser.gender]}
+                </Typography>
+              </Grid>
 
-              <Grid item xs={4}><Typography variant="body1"><strong>Type:</strong></Typography></Grid>
-              <Grid item xs={8}><Typography variant="body1">{selectedUser.type === 0 ? 'Staff' : 'Admin'}</Typography></Grid>
+              <Grid item xs={4}>
+                <Typography variant="body1">
+                  <strong>Type:</strong>
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="body1">
+                  {selectedUser.type === 0 ? "Staff" : "Admin"}
+                </Typography>
+              </Grid>
 
-              <Grid item xs={4}><Typography variant="body1"><strong>Location:</strong></Typography></Grid>
-              <Grid item xs={8}><Typography variant="body1">{selectedUser.location === 0 ? 'Ho Chi Minh' : 'Ha Noi'}</Typography></Grid>
+              <Grid item xs={4}>
+                <Typography variant="body1">
+                  <strong>Location:</strong>
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="body1">
+                  {selectedUser.location === 0 ? "Ho Chi Minh" : "Ha Noi"}
+                </Typography>
+              </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleDialogClose} sx={{ color: '#D6001C' }}>
+            <Button onClick={handleDialogClose} sx={{ color: "#D6001C" }}>
               OK
             </Button>
           </DialogActions>
