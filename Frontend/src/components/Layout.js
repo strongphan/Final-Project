@@ -1,49 +1,50 @@
-import React, { useState, useEffect } from "react";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
-  CssBaseline,
   Box,
-  Typography,
-  Paper,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
+  CssBaseline,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  InputAdornment,
   TextField,
+  Typography,
 } from "@mui/material";
-import Header from "./Header";
-import Footer from "./Footer";
-import VerticalNavbar from "./VerticalNavbar";
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode"; // Import jwtDecode
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 import { AppRouter } from "../routes/AppRouter";
+import Footer from "./Footer";
+import Header from "./Header";
+import VerticalNavbarAdmin from "./VerticalNavbarAdmin";
+import VerticalNavbarStaff from "./VerticalNavbarStaff";
 
 const Layout = ({ children }) => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-  const [firstLogin, setFirstLogin] = useState(false);
   const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [validationError, setValidationError] = useState("");
-  const [showSuccessDialog, setShowSuccessDialog] = useState(false); // New state for success dialog
-  const { currentUser, setIsAuthenticated } = useAuthContext();
+  const [cValidationError, setCValidationError] = useState("");
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [capsLockOn, setCapsLockOn] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { currentUser, isAuthenticated, setIsAuthenticated } = useAuthContext();
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      if (decodedToken && decodedToken.FirstLogin === "True") {
-        setFirstLogin(true);
-        setShowLogoutDialog(true);
-        localStorage.setItem("firstLogin", "true");
-      }
+    if (token && currentUser.isFirst) {
+      setShowLogoutDialog(true);
     }
-  }, []);
+  }, [currentUser.isFirst]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("password");
     navigate("/");
   };
 
@@ -55,9 +56,15 @@ const Layout = ({ children }) => {
     const oldPassword = localStorage.getItem("password");
     const newPasswordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
-    if (newPassword === oldPassword || !newPasswordRegex.test(newPassword)) {
+    if (newPassword === oldPassword) {
       setValidationError(
-        "New password must be 8-16 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character. It must also be different from the old password."
+        "New password must be different from the old password."
+      );
+      return;
+    }
+    if (!newPasswordRegex.test(newPassword)) {
+      setValidationError(
+        "New password must be 8-16 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character."
       );
       return;
     }
@@ -75,23 +82,22 @@ const Layout = ({ children }) => {
             confirmPassword: newPassword,
           }
         );
-        const username = currentUser.username;
-        const response2 = await axios.post(
-          "https://localhost:7083/api/users/login",
-          { username, newPassword }
-        );
-        const data = response2.data;
-        if (data.flag) {
+
+        if (response1.data === true) {
+          const username = currentUser.name;
+          const response2 = await axios.post(
+            "https://localhost:7083/api/users/login",
+            { userName: username, password: newPassword }
+          );
+          const data = response2.data;
           setIsAuthenticated(true);
           localStorage.setItem("token", data.token);
-          navigate("/");
-        }
-        if (response1.data === true) {
+          currentUser.isFirst = false;
+
           setNewPassword("");
           setShowLogoutDialog(false);
           localStorage.removeItem("firstLogin");
           setShowSuccessDialog(true);
-          setFirstLogin(false);
           localStorage.removeItem("password");
         } else {
           setValidationError("Failed to change password. Please try again.");
@@ -113,30 +119,59 @@ const Layout = ({ children }) => {
     const oldPassword = localStorage.getItem("password");
     if (!newPassword) {
       setValidationError("New password cannot be empty.");
-    } else if (newPassword === oldPassword) {
+    }
+  };
+
+  const handleConfirmPassword = () => {
+    if (!confirmPassword) {
+      setCValidationError("Confirm password cannot be empty.");
+    } else if (confirmPassword !== newPassword) {
+      setCValidationError("Passwords do not match. Please re-enter.");
+    } else {
+      setCValidationError("");
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    setCapsLockOn(event.getModifierState("CapsLock"));
+    if (
+      (newPassword || confirmPassword) &&
+      event.getModifierState("CapsLock")
+    ) {
       setValidationError(
-        "New password must be different from the old password."
+        "Caps Lock is on. Please check if you're unintentionally using uppercase letters."
       );
     } else {
-      const newPasswordRegex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
-      if (!newPasswordRegex.test(newPassword)) {
-        setValidationError(
-          "New password must be 8-16 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character."
-        );
-      }
+      setValidationError("");
     }
+  };
+
+  const toggleNewPasswordVisibility = () => {
+    setShowNewPassword(!showNewPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
     <div>
       <CssBaseline />
       <Header />
-      <Box display="flex" p={2}>
+      <Box
+        display="flex"
+        p={2}>
         <Box>
-          <VerticalNavbar />
+          {isAuthenticated &&
+            (currentUser.role === "Admin" ? (
+              <VerticalNavbarAdmin />
+            ) : (
+              <VerticalNavbarStaff />
+            ))}
         </Box>
-        <Box flexGrow={1} ml={2}>
+        <Box
+          flexGrow={1}
+          ml={2}>
           <main style={{ p: "2" }}>
             <AppRouter />
           </main>
@@ -144,8 +179,12 @@ const Layout = ({ children }) => {
       </Box>
       <Footer />
 
-      <Dialog open={showLogoutDialog && firstLogin} onClose={handleCloseDialog}>
-        <DialogTitle>Change Password</DialogTitle>
+      <Dialog
+        open={currentUser.isFirst && showLogoutDialog}
+        onClose={handleCloseDialog}
+        disableBackdropClick
+        disableEscapeKeyDown>
+        <DialogTitle sx={{ color: "#D6001C" }}>Change Password</DialogTitle>
         <DialogContent>
           <Typography>
             This is the first time you've logged in. You must change your
@@ -156,25 +195,97 @@ const Layout = ({ children }) => {
               autoFocus
               margin="dense"
               label="New Password"
-              type="password"
+              type={showNewPassword ? "text" : "password"}
               fullWidth
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               onBlur={handlePasswordBlur}
+              required
+              onKeyDown={handleKeyDown}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleNewPasswordVisibility}>
+                      {showNewPassword ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                "& label.Mui-focused": { color: "#000" },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#000" },
+                },
+              }}
             />
           </Box>
           {validationError && (
-            <Typography color="error" variant="caption" component="div">
+            <Typography
+              color="error"
+              variant="caption"
+              component="div">
               {validationError}
+            </Typography>
+          )}
+          <Box mt={2}>
+            <TextField
+              margin="dense"
+              label="Confirm Password"
+              type={showConfirmPassword ? "text" : "password"}
+              fullWidth
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              onBlur={handleConfirmPassword}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleConfirmPasswordVisibility}>
+                      {showConfirmPassword ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                "& label.Mui-focused": { color: "#000" },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#000" },
+                },
+              }}
+            />
+          </Box>
+          {cValidationError && (
+            <Typography
+              color="error"
+              variant="caption"
+              component="div">
+              {cValidationError}
+            </Typography>
+          )}
+          {capsLockOn && (
+            <Typography
+              color="error"
+              variant="caption"
+              component="div">
+              *Caps Lock is on. Please check if you're unintentionally using
+              uppercase letters.
             </Typography>
           )}
         </DialogContent>
         <DialogActions>
           <Button
+            disabled={!!validationError || !!cValidationError}
             onClick={handlePasswordChange}
             variant="contained"
-            color="primary"
-          >
+            sx={{ bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}>
             Save
           </Button>
         </DialogActions>
@@ -183,13 +294,20 @@ const Layout = ({ children }) => {
       <Dialog
         open={showSuccessDialog}
         onClose={() => setShowSuccessDialog(false)}
-      >
+        disableBackdropClick
+        disableEscapeKeyDown>
         <DialogTitle>Success</DialogTitle>
         <DialogContent>
           <Typography>Password changed successfully.</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowSuccessDialog(false)} color="primary">
+          <Button
+            onClick={() => setShowSuccessDialog(false)}
+            sx={{
+              color: "white",
+              bgcolor: "#D6001C",
+              "&:hover": { bgcolor: "#D6001C" },
+            }}>
             OK
           </Button>
         </DialogActions>

@@ -29,11 +29,12 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { FilterRequest, GetDetailedUser } from "../services/Service";
+import { path } from "../routes/routeContants";
 
 //reformat code from 	2017-09-18T00:00:00 to 19/08/2017
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-GB'); // en-GB format gives the desired "dd/mm/yyyy" format
+  return date.toLocaleDateString("en-GB"); // en-GB format gives the desired "dd/mm/yyyy" format
 };
 
 // custom style background when hover user
@@ -61,7 +62,7 @@ const ManageUserPage = () => {
     sortOrder: "",
     page: 1,
     pageSize: "20",
-    type: ""
+    type: "",
   });
 
   const [users, setUser] = useState([]);
@@ -81,7 +82,7 @@ const ManageUserPage = () => {
     setSearchTerm(e.target.value);
   };
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       setFilterRequest((prev) => ({
         ...prev,
         searchTerm: searchTerm,
@@ -93,7 +94,7 @@ const ManageUserPage = () => {
       ...prev,
       searchTerm: searchTerm,
     }));
-  }
+  };
 
   // Handle User Detail Dialog
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -120,7 +121,6 @@ const ManageUserPage = () => {
         type: e.target.value
       })
     }
-
   };
 
   const handlePageChange = (e, value) => {
@@ -182,20 +182,19 @@ const ManageUserPage = () => {
           marginLeft: "100px",
           width: "1200px",
           height: "calc(100vh - 150px)",
-        }}
-      >
+        }}>
         <h3 style={{ color: "#D6001C" }}>User List</h3>
         <Box
-          sx={{ display: "flex", alignItems: "center", marginBottom: "20px" }}
-        >
-          <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+          sx={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+          <FormControl
+            variant="outlined"
+            sx={{ minWidth: 120 }}>
             <InputLabel>Type</InputLabel>
             <Select
               label="Type"
               value={filterRequest.type}
               name="type"
-              onChange={handleTypeChange}
-            >
+              onChange={handleTypeChange}>
               <MenuItem value="All">All</MenuItem>
               <MenuItem value="Admin">Admin</MenuItem>
               <MenuItem value="Staff">Staff</MenuItem>
@@ -221,8 +220,7 @@ const ManageUserPage = () => {
           <Button
             variant="contained"
             sx={{ backgroundColor: "#D6001C", height: "56px" }}
-            onClick={() => navigate("/create-user")}
-          >
+            onClick={() => navigate(path.userCreate)}>
             Create new user
           </Button>
         </Box>
@@ -236,8 +234,7 @@ const ManageUserPage = () => {
                   top: 0,
                   zIndex: 1,
                   backgroundColor: "white",
-                }}
-              >
+                }}>
                 <TableRow>
                   <TableCell sx={{ width: '150px' }}>
                     <Button
@@ -250,8 +247,7 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}
-                    >
+                      }}>
                       Staff Code
                     </Button>
                   </TableCell>
@@ -266,15 +262,13 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}
-                    >
+                      }}>
                       Full Name
                     </Button>
                   </TableCell>
                   <TableCell sx={{
                     width: "150px", fontWeight: "bold",
                     textTransform: "none",
-                    padding: 0,
                     minWidth: "auto",
                     color: "black",
                     padding: "16px"
@@ -292,8 +286,7 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}
-                    >
+                      }}>
                       Joined Date
                     </Button>
                   </TableCell>
@@ -308,37 +301,24 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}
-                    >
+                      }}>
                       Type
                     </Button>
                   </TableCell>
                   <TableCell sx={{
                     width: '150px', fontWeight: "bold",
                     textTransform: "none",
-                    padding: 0,
                     minWidth: "auto",
                     color: "black",
                     padding: '16px'
                   }}>
-                    {/* <Button
-                      variant="text"
-                      sx={{
-                        fontWeight: "bold",
-                        textTransform: "none",
-                        padding: 0,
-                        minWidth: "auto",
-                        color: "black",
-                      }}
-                    > */}
                     Options
-                    {/* </Button> */}
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {console.log(users)}
-                {users.length == 0 && (
+                {users.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={6} sx={{ color: "red", textAlign: "center", padding: "28px", fontWeight: "bold" }} >
                       No user found
@@ -381,8 +361,7 @@ const ManageUserPage = () => {
             display: "flex",
             justifyContent: "flex-end",
             paddingTop: "10px",
-          }}
-        >
+          }}>
           <Pagination
             count={Math.ceil(totalCount / filterRequest.pageSize)}
             variant="outlined"
