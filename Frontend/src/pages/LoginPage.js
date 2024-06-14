@@ -73,7 +73,9 @@ const LoginPage = () => {
 
   return (
     <>
-      <Paper elevation={3} sx={{ p: 3, mt: 3, mb: 3 }}>
+      <Paper
+        elevation={3}
+        sx={{ p: 3, mt: 3, mb: 3 }}>
         <Box
           sx={{
             display: "flex",
@@ -90,16 +92,16 @@ const LoginPage = () => {
               width: "100%",
               maxWidth: "400px",
             },
-          }}
-        >
+          }}>
           <Typography
             variant="h2"
             gutterBottom
-            sx={{ color: "#D6001C", fontWeight: "bold", mt: 3 }}
-          >
+            sx={{ color: "#D6001C", fontWeight: "bold", mt: 3 }}>
             Login to your account
           </Typography>
-          <Typography variant="h6" sx={{ mt: 2 }}>
+          <Typography
+            variant="h6"
+            sx={{ mt: 2 }}>
             Access your asset management system securely and efficiently.
           </Typography>
           <form onSubmit={handleLogin}>
@@ -148,8 +150,7 @@ const LoginPage = () => {
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={togglePasswordVisibility}
-                      edge="end"
-                    >
+                      edge="end">
                       {showPassword ? (
                         <VisibilityOffIcon />
                       ) : (
@@ -169,7 +170,9 @@ const LoginPage = () => {
               }}
             />
             {isCapsLockOn && (
-              <Typography variant="caption" color="error">
+              <Typography
+                variant="caption"
+                color="error">
                 *Caps Lock is on.
               </Typography>
             )}
@@ -184,18 +187,18 @@ const LoginPage = () => {
                 "&:hover": {
                   bgcolor: "rgba(214, 0, 28, 0.8)",
                 },
-              }}
-            >
+              }}>
               Login
             </Button>
           </form>
         </Box>
       </Paper>
 
-      <Dialog open={alertOpen} onClose={handleAlertClose}>
+      <Dialog
+        open={alertOpen}
+        onClose={handleAlertClose}>
         <DialogTitle
-          sx={{ bgcolor: "grey.300", color: "#D6001C", fontWeight: "bold" }}
-        >
+          sx={{ bgcolor: "grey.300", color: "#D6001C", fontWeight: "bold" }}>
           Error
         </DialogTitle>
         <DialogContent>
@@ -204,7 +207,9 @@ const LoginPage = () => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAlertClose} sx={{ color: "#D6001C" }}>
+          <Button
+            onClick={handleAlertClose}
+            sx={{ color: "#D6001C" }}>
             OK
           </Button>
         </DialogActions>
