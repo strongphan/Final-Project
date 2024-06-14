@@ -14,3 +14,7 @@ export const FilterRequest = async (body) => {
     return response;
 }
 
+export const GetDetailedUser = async (id) => {
+    const response = await httpClient.get(`/users/${id}`)
+    return response.data;
+}

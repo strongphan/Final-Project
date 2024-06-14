@@ -192,7 +192,11 @@ const LoginPage = () => {
         </Box>
       </Paper>
 
-      <Dialog open={alertOpen} onClose={handleAlertClose}>
+      <Dialog
+        open={alertOpen}
+        onClose={handleAlertClose}
+        sx={{ '& .MuiDialog-paper': { maxWidth: '80%', width: 400 } }}
+      >
         <DialogTitle
           sx={{ bgcolor: "grey.300", color: "#D6001C", fontWeight: "bold" }}
         >
