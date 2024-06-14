@@ -1,5 +1,10 @@
-// pages/ManageUserPage.js
-import { ArrowDownward, ArrowDropDown, ArrowDropUp, ArrowUpward, Delete, Edit, Search } from "@mui/icons-material";
+import {
+  ArrowDropDown,
+  ArrowDropUp,
+  Delete,
+  Edit,
+  Search,
+} from "@mui/icons-material";
 import { Sheet } from "@mui/joy";
 import {
   Box,
@@ -22,12 +27,13 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { path } from "../routes/routeContants";
 import { FilterRequest } from "../services/Service";
 
 //reformat code from 	2017-09-18T00:00:00 to 19/08/2017
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-GB'); // en-GB format gives the desired "dd/mm/yyyy" format
+  return date.toLocaleDateString("en-GB"); // en-GB format gives the desired "dd/mm/yyyy" format
 };
 
 const ManageUserPage = () => {
@@ -39,7 +45,7 @@ const ManageUserPage = () => {
     sortOrder: "",
     page: 1,
     pageSize: "20",
-    type: ""
+    type: "",
   });
   const [users, setUser] = useState([]);
 
@@ -54,7 +60,6 @@ const ManageUserPage = () => {
     getUsers(filterRequest);
   }, [filterRequest]);
 
-
   //Search state to set in filter request after entered
   const [searchTerm, setSearchTerm] = useState("");
   const handleSearchChange = (e) => {
@@ -62,7 +67,7 @@ const ManageUserPage = () => {
     setSearchTerm(e.target.value);
   };
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       setFilterRequest((prev) => ({
         ...prev,
         searchTerm: searchTerm,
@@ -74,7 +79,7 @@ const ManageUserPage = () => {
       ...prev,
       searchTerm: searchTerm,
     }));
-  }
+  };
 
   // console.log("filter", filterRequest);
 
@@ -83,13 +88,12 @@ const ManageUserPage = () => {
     if (e.target.value === "All") {
       setFilterRequest({
         type: "",
-      })
+      });
     } else {
       setFilterRequest({
         type: e.target.value,
-      })
+      });
     }
-
   };
 
   const handlePageChange = (e, value) => {
@@ -150,20 +154,19 @@ const ManageUserPage = () => {
           marginLeft: "100px",
           width: "1200px",
           height: "calc(100vh - 150px)",
-        }}
-      >
+        }}>
         <h3 style={{ color: "#D6001C" }}>User List</h3>
         <Box
-          sx={{ display: "flex", alignItems: "center", marginBottom: "20px" }}
-        >
-          <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+          sx={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+          <FormControl
+            variant="outlined"
+            sx={{ minWidth: 120 }}>
             <InputLabel>Type</InputLabel>
             <Select
               label="Type"
               value={filterRequest.type}
               name="type"
-              onChange={handleTypeChange}
-            >
+              onChange={handleTypeChange}>
               <MenuItem value="All">All</MenuItem>
               <MenuItem value="Admin">Admin</MenuItem>
               <MenuItem value="Staff">Staff</MenuItem>
@@ -189,8 +192,7 @@ const ManageUserPage = () => {
           <Button
             variant="contained"
             sx={{ backgroundColor: "#D6001C", height: "56px" }}
-            onClick={() => navigate("/create-user")}
-          >
+            onClick={() => navigate(path.userCreate)}>
             Create new user
           </Button>
         </Box>
@@ -204,8 +206,7 @@ const ManageUserPage = () => {
                   top: 0,
                   zIndex: 1,
                   backgroundColor: "white",
-                }}
-              >
+                }}>
                 <TableRow>
                   <TableCell>
                     <Button
@@ -218,8 +219,7 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}
-                    >
+                      }}>
                       Staff Code
                     </Button>
                   </TableCell>
@@ -234,8 +234,7 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}
-                    >
+                      }}>
                       Full Name
                     </Button>
                   </TableCell>
@@ -248,8 +247,7 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}
-                    >
+                      }}>
                       Username
                     </Button>
                   </TableCell>
@@ -264,8 +262,7 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}
-                    >
+                      }}>
                       Joined Date
                     </Button>
                   </TableCell>
@@ -280,8 +277,7 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}
-                    >
+                      }}>
                       Type
                     </Button>
                   </TableCell>
@@ -296,8 +292,7 @@ const ManageUserPage = () => {
                         padding: 0,
                         minWidth: "auto",
                         color: "black",
-                      }}
-                    >
+                      }}>
                       Actions
                     </Button>
                   </TableCell>
@@ -332,8 +327,7 @@ const ManageUserPage = () => {
             display: "flex",
             justifyContent: "flex-end",
             paddingTop: "10px",
-          }}
-        >
+          }}>
           <Pagination
             count={Math.ceil(totalCount / filterRequest.pageSize)}
             variant="outlined"
