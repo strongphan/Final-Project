@@ -17,6 +17,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
+import { path } from "../routes/routeContants";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -41,7 +42,7 @@ const LoginPage = () => {
         localStorage.setItem("token", data.token);
         if (data.i)
         localStorage.setItem("password", password);
-        navigate("/");
+        navigate(path.home);
       } else {
         setAlertOpen(true);
       }

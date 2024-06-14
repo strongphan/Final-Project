@@ -58,7 +58,7 @@ const ManageUserPage = () => {
   const [totalCount, setTotalCount] = useState();
   const [filterRequest, setFilterRequest] = useState({
     searchTerm: "",
-    sortColumn: "",
+    sortColumn: "name",
     sortOrder: "",
     page: 1,
     pageSize: "20",
@@ -89,12 +89,13 @@ const ManageUserPage = () => {
       }));
     }
   };
-  const handleOnBlur = () => {
-    setFilterRequest((prev) => ({
-      ...prev,
-      searchTerm: searchTerm,
-    }));
-  };
+  console.log(filterRequest);
+  // const handleOnBlur = () => {
+  //   setFilterRequest((prev) => ({
+  //     ...prev,
+  //     searchTerm: searchTerm,
+  //   }));
+  // };
 
   // Handle User Detail Dialog
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -109,20 +110,17 @@ const ManageUserPage = () => {
     setSelectedUser(null);
   };
 
-  const handleTypeChange = (e) => {
-    if (e.target.value === "All") {
-      setFilterRequest({
-        searchTerm: "", sortColumn: "", sortOrder: "", page: 1, pageSize: "20",
-        type: ""
-      })
-    } else {
-      setFilterRequest({
-        searchTerm: "", sortColumn: "", sortOrder: "", page: 1, pageSize: "20",
-        type: e.target.value
-      })
-    }
+  const handleTypeChange = (value) => {
+    setFilterRequest((prevState) => ({
+      ...prevState,
+      type: prevState.type === value ? "" : value,
+      searchTerm: "",
+      sortColumn: "name",
+      sortOrder: "",
+      page: 1,
+      pageSize: "20"
+    }));
   };
-
   const handlePageChange = (e, value) => {
     setFilterRequest((prev) => ({
       ...prev,
@@ -142,7 +140,7 @@ const ManageUserPage = () => {
           newSortColumn = column;
         } else if (prev.sortOrder === "") {
           newSortOrder = "";
-          newSortColumn = "";
+          newSortColumn = "name";
         } else {
           // Start with descend order
           newSortOrder = "descend";
@@ -161,6 +159,7 @@ const ManageUserPage = () => {
       };
     });
   };
+
 
   const getSortIcon = (column) => {
     if (filterRequest.sortColumn === column) {
@@ -190,14 +189,34 @@ const ManageUserPage = () => {
             variant="outlined"
             sx={{ minWidth: 120 }}>
             <InputLabel>Type</InputLabel>
+            {console.log(filterRequest.type)}
             <Select
               label="Type"
               value={filterRequest.type}
               name="type"
-              onChange={handleTypeChange}>
-              <MenuItem value="All">All</MenuItem>
-              <MenuItem value="Admin">Admin</MenuItem>
-              <MenuItem value="Staff">Staff</MenuItem>
+            >
+              <MenuItem
+                value="Admin"
+                onClick={() => handleTypeChange("Admin")}
+                sx={{
+                  backgroundColor: filterRequest.type === "Admin" ? 'gray' : 'inherit',
+                  '&:hover': {
+                    backgroundColor: 'lightgray'
+                  }
+                }}>
+                Admin
+              </MenuItem>
+              <MenuItem
+                value="Staff"
+                onClick={() => handleTypeChange("Staff")}
+                sx={{
+                  backgroundColor: filterRequest.type === "Staff" ? 'gray' : 'inherit',
+                  '&:hover': {
+                    backgroundColor: 'lightgray'
+                  }
+                }}>
+                Staff
+              </MenuItem>
             </Select>
           </FormControl>
           <TextField
@@ -206,7 +225,7 @@ const ManageUserPage = () => {
             value={searchTerm}
             name="search"
             onChange={handleSearchChange}
-            onBlur={handleOnBlur}
+            // onBlur={handleOnBlur}
             onKeyPress={handleKeyPress}
             InputProps={{
               endAdornment: (
@@ -312,12 +331,11 @@ const ManageUserPage = () => {
                     color: "black",
                     padding: '16px'
                   }}>
-                    Options
+
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {console.log(users)}
                 {users.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={6} sx={{ color: "red", textAlign: "center", padding: "28px", fontWeight: "bold" }} >
@@ -338,14 +356,12 @@ const ManageUserPage = () => {
                       <IconButton onClick={(e) => {
                         //Prevent showing popup
                         e.stopPropagation()
-                        console.log(1)
                       }}>
                         <CreateTwoTone />
                       </IconButton>
                       <IconButton sx={{ color: '#D6001C' }} onClick={(e) => {
                         //Prevent showing popup
                         e.stopPropagation()
-                        console.log(1)
                       }}>
                         <CancelTwoTone />
                       </IconButton>
