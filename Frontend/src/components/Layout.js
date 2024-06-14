@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
   Box,
   Button,
@@ -13,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 import { AppRouter } from "../routes/AppRouter";
@@ -20,8 +22,6 @@ import Footer from "./Footer";
 import Header from "./Header";
 import VerticalNavbarAdmin from "./VerticalNavbarAdmin";
 import VerticalNavbarStaff from "./VerticalNavbarStaff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const Layout = ({ children }) => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
@@ -31,8 +31,8 @@ const Layout = ({ children }) => {
   const [cValidationError, setCValidationError] = useState("");
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [capsLockOn, setCapsLockOn] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false); // State for showing/hiding new password
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for showing/hiding confirm password
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { currentUser, isAuthenticated, setIsAuthenticated } = useAuthContext();
   const navigate = useNavigate();
 
@@ -57,7 +57,9 @@ const Layout = ({ children }) => {
     const newPasswordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
     if (newPassword === oldPassword) {
-      setValidationError("New password must be different from the old password.");
+      setValidationError(
+        "New password must be different from the old password."
+      );
       return;
     }
     if (!newPasswordRegex.test(newPassword)) {
@@ -72,7 +74,7 @@ const Layout = ({ children }) => {
       if (token) {
         const userId = currentUser.id;
         const response1 = await axios.post(
-          "http://localhost:7083/api/users/change_password",
+          "https://localhost:7083/api/users/change_password",
           {
             id: userId,
             oldPassword: oldPassword,
@@ -84,7 +86,7 @@ const Layout = ({ children }) => {
         if (response1.data === true) {
           const username = currentUser.name;
           const response2 = await axios.post(
-            "http://localhost:7083/api/users/login",
+            "https://localhost:7083/api/users/login",
             { userName: username, password: newPassword }
           );
           const data = response2.data;
@@ -132,7 +134,10 @@ const Layout = ({ children }) => {
 
   const handleKeyDown = (event) => {
     setCapsLockOn(event.getModifierState("CapsLock"));
-    if ((newPassword || confirmPassword) && event.getModifierState("CapsLock")) {
+    if (
+      (newPassword || confirmPassword) &&
+      event.getModifierState("CapsLock")
+    ) {
       setValidationError(
         "Caps Lock is on. Please check if you're unintentionally using uppercase letters."
       );
@@ -153,7 +158,9 @@ const Layout = ({ children }) => {
     <div>
       <CssBaseline />
       <Header />
-      <Box display="flex" p={2}>
+      <Box
+        display="flex"
+        p={2}>
         <Box>
           {isAuthenticated &&
             (currentUser.role === "Admin" ? (
@@ -162,7 +169,9 @@ const Layout = ({ children }) => {
               <VerticalNavbarStaff />
             ))}
         </Box>
-        <Box flexGrow={1} ml={2}>
+        <Box
+          flexGrow={1}
+          ml={2}>
           <main style={{ p: "2" }}>
             <AppRouter />
           </main>
@@ -174,8 +183,7 @@ const Layout = ({ children }) => {
         open={currentUser.isFirst && showLogoutDialog}
         onClose={handleCloseDialog}
         disableBackdropClick
-        disableEscapeKeyDown
-      >
+        disableEscapeKeyDown>
         <DialogTitle sx={{ color: "#D6001C" }}>Change Password</DialogTitle>
         <DialogContent>
           <Typography>
@@ -187,7 +195,7 @@ const Layout = ({ children }) => {
               autoFocus
               margin="dense"
               label="New Password"
-              type={showNewPassword ? "text" : "password"} // Toggle visibility based on showNewPassword state
+              type={showNewPassword ? "text" : "password"}
               fullWidth
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -198,7 +206,11 @@ const Layout = ({ children }) => {
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton onClick={toggleNewPasswordVisibility}>
-                      {showNewPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      {showNewPassword ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -212,7 +224,10 @@ const Layout = ({ children }) => {
             />
           </Box>
           {validationError && (
-            <Typography color="error" variant="caption" component="div">
+            <Typography
+              color="error"
+              variant="caption"
+              component="div">
               {validationError}
             </Typography>
           )}
@@ -220,7 +235,7 @@ const Layout = ({ children }) => {
             <TextField
               margin="dense"
               label="Confirm Password"
-              type={showConfirmPassword ? "text" : "password"} // Toggle visibility based on showConfirmPassword state
+              type={showConfirmPassword ? "text" : "password"}
               fullWidth
               required
               value={confirmPassword}
@@ -230,7 +245,11 @@ const Layout = ({ children }) => {
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton onClick={toggleConfirmPasswordVisibility}>
-                      {showConfirmPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      {showConfirmPassword ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -244,13 +263,20 @@ const Layout = ({ children }) => {
             />
           </Box>
           {cValidationError && (
-            <Typography color="error" variant="caption" component="div">
+            <Typography
+              color="error"
+              variant="caption"
+              component="div">
               {cValidationError}
             </Typography>
           )}
           {capsLockOn && (
-            <Typography color="error" variant="caption" component="div">
-              *Caps Lock is on. Please check if you're unintentionally using uppercase letters.
+            <Typography
+              color="error"
+              variant="caption"
+              component="div">
+              *Caps Lock is on. Please check if you're unintentionally using
+              uppercase letters.
             </Typography>
           )}
         </DialogContent>
@@ -259,8 +285,7 @@ const Layout = ({ children }) => {
             disabled={!!validationError || !!cValidationError}
             onClick={handlePasswordChange}
             variant="contained"
-            sx={{ bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}
-          >
+            sx={{ bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}>
             Save
           </Button>
         </DialogActions>
@@ -270,8 +295,7 @@ const Layout = ({ children }) => {
         open={showSuccessDialog}
         onClose={() => setShowSuccessDialog(false)}
         disableBackdropClick
-        disableEscapeKeyDown
-      >
+        disableEscapeKeyDown>
         <DialogTitle>Success</DialogTitle>
         <DialogContent>
           <Typography>Password changed successfully.</Typography>
@@ -279,8 +303,11 @@ const Layout = ({ children }) => {
         <DialogActions>
           <Button
             onClick={() => setShowSuccessDialog(false)}
-            sx={{ color: "white", bgcolor: "#D6001C", "&:hover": { bgcolor: "#D6001C" } }}
-          >
+            sx={{
+              color: "white",
+              bgcolor: "#D6001C",
+              "&:hover": { bgcolor: "#D6001C" },
+            }}>
             OK
           </Button>
         </DialogActions>
