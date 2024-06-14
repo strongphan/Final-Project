@@ -56,7 +56,7 @@ const CreateUser = () => {
 
   const handleChange = (event) => {
     let { name, value } = event.target;
-    
+
     let errorMessage = "";
     if (value.trim() === "") {
       errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
@@ -111,18 +111,36 @@ const CreateUser = () => {
     setUsers({ ...users, [name]: value });
   };
 
+  // const handleNameChange = (event) => {
+  //   let errorMessage = '';
+  //   const { name, value } = event.target;
+  //   setUsers({ ...users, [name]: value });
+  //   if(users.firstName && name === 'firstName' ){
+  //     const isValid = /^[a-zA-Z]{2,20}$/.test(value);
+  //     if(!isValid){
+  //       errorMessage = `First name must contain only alphabetical characters.`;
+  //       setFormErrors({ ...formErrors, [name]: errorMessage });
+
+  //     }
+  //   }  };
   const handleNameChange = (event) => {
     let errorMessage = '';
     const { name, value } = event.target;
-    setUsers({ ...users, [name]: value });
-    if(users.firstName && name === 'firstName' ){
-      const isValid = /^[a-zA-Z]{2,20}$/.test(value);
+    const trimmedValue = value.replace(/[^a-zA-Z]/g, ''); // Remove all non-alphabetical characters
+  
+    setUsers({ ...users, [name]: trimmedValue });
+  
+    if(name === 'firstName' ){
+      const isValid = /^[a-zA-Z]{2,20}$/.test(trimmedValue);
       if(!isValid){
         errorMessage = `First name must contain only alphabetical characters.`;
-        setFormErrors({ ...formErrors, [name]: errorMessage });
-
       }
-    }  };
+    }
+  
+    setFormErrors({ ...formErrors, [name]: errorMessage });
+  };
+  
+
 
   const handleLocationChange = (event) => {
     const { name, value } = event.target;
@@ -183,8 +201,8 @@ const CreateUser = () => {
   const errorMessage = React.useMemo(() => {
     switch (error) {
       // case 'maxDate':
-      // case 'minDate': {
-      //   return 'Invalid Date';
+      // case 'maxDate': {
+      //   return 'Date of birth must less than current day.';
       // }
 
       case 'invalidDate': {
