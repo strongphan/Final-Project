@@ -52,6 +52,7 @@ const CreateUser = () => {
   });
 
   const handleChange = (event) => {
+    console.log("dadasdasd");
     const { name, value } = event.target;
     setUsers({ ...users, [name]: value });
     const isValid = /^[a-zA-Z]{2,20}$/.test(value);
@@ -61,12 +62,11 @@ const CreateUser = () => {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
       } is required`;
-    } else if (value.length < 2 ) {
+    } else if (value.length < 2) {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
       } must be at least 2 characters long.`;
-    }
-    else if ( value.length > 20) {
+    } else if (value.length > 20) {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
       } must not exceed 20 characters.`;
@@ -90,12 +90,11 @@ const CreateUser = () => {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
       } is required`;
-    } else if (trimmedValue.length < 2 ) {
+    } else if (trimmedValue.length < 2) {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
       } must be at least 2 characters long.`;
-    }
-    else if ( trimmedValue.length > 20) {
+    } else if (trimmedValue.length > 20) {
       errorMessage = `${
         name.charAt(0).toUpperCase() + name.slice(1)
       } must not exceed 20 characters.`;
@@ -121,7 +120,7 @@ const CreateUser = () => {
 
   const isWeekend = (date) => {
     const day = date?.getDay();
-    return day === 6 || day === 0; 
+    return day === 6 || day === 0;
   };
 
   useEffect(() => {
@@ -131,17 +130,20 @@ const CreateUser = () => {
     } else {
       const joined = new Date(users.joinedDate);
       const dob = new Date(users.dateOfBirth);
-  
+
       if (dob && joined < dob) {
         errorMessage = "Joined date must be after date of birth.";
       } else if (isWeekend(joined)) {
         errorMessage = "Joined date must not be on a weekend.";
       }
     }
-  
-    setFormErrors((prevErrors) => ({ ...prevErrors, joinedDate: errorMessage }));
+
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      joinedDate: errorMessage,
+    }));
   }, [users.joinedDate, users.dateOfBirth]);
-  
+
   useEffect(() => {
     let errorMessage = "";
     if (!users.dateOfBirth) {
@@ -151,15 +153,17 @@ const CreateUser = () => {
       const age = Math.floor(
         (Date.now() - dob) / (365.25 * 24 * 60 * 60 * 1000)
       );
-  
+
       if (age < 18) {
         errorMessage = "User is under 18. Please select a different date";
       }
     }
-  
-    setFormErrors((prevErrors) => ({ ...prevErrors, dateOfBirth: errorMessage }));
-  }, [users.dateOfBirth]);
 
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      dateOfBirth: errorMessage,
+    }));
+  }, [users.dateOfBirth]);
 
   const handleSubmit = async (event) => {
     console.log("location : ", currentUser.locality);
@@ -278,7 +282,9 @@ const CreateUser = () => {
                   />
                 </LocalizationProvider>
                 {formErrors.dateOfBirth && (
-                  <FormHelperText error>{formErrors.dateOfBirth}</FormHelperText>
+                  <FormHelperText error>
+                    {formErrors.dateOfBirth}
+                  </FormHelperText>
                 )}
               </Grid>
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>

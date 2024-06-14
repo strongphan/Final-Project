@@ -1,5 +1,13 @@
 // pages/ManageUserPage.js
-import { ArrowDownward, ArrowDropDown, ArrowDropUp, ArrowUpward, Delete, Edit, Search } from "@mui/icons-material";
+import {
+  ArrowDownward,
+  ArrowDropDown,
+  ArrowDropUp,
+  ArrowUpward,
+  Delete,
+  Edit,
+  Search,
+} from "@mui/icons-material";
 import { Sheet } from "@mui/joy";
 import {
   Box,
@@ -27,7 +35,7 @@ import { FilterRequest } from "../services/Service";
 //reformat code from 	2017-09-18T00:00:00 to 19/08/2017
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-GB'); // en-GB format gives the desired "dd/mm/yyyy" format
+  return date.toLocaleDateString("en-GB"); // en-GB format gives the desired "dd/mm/yyyy" format
 };
 
 const ManageUserPage = () => {
@@ -35,11 +43,11 @@ const ManageUserPage = () => {
   const [totalCount, setTotalCount] = useState();
   const [filterRequest, setFilterRequest] = useState({
     searchTerm: "",
-    sortColumn: "",
-    sortOrder: "",
+    sortColumn: "name",
+    sortOrder: "ascending",
     page: 1,
     pageSize: "20",
-    type: ""
+    type: "",
   });
   const [users, setUser] = useState([]);
 
@@ -54,7 +62,6 @@ const ManageUserPage = () => {
     getUsers(filterRequest);
   }, [filterRequest]);
 
-
   //Search state to set in filter request after entered
   const [searchTerm, setSearchTerm] = useState("");
   const handleSearchChange = (e) => {
@@ -62,7 +69,7 @@ const ManageUserPage = () => {
     setSearchTerm(e.target.value);
   };
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       setFilterRequest((prev) => ({
         ...prev,
         searchTerm: searchTerm,
@@ -74,7 +81,7 @@ const ManageUserPage = () => {
       ...prev,
       searchTerm: searchTerm,
     }));
-  }
+  };
 
   // console.log("filter", filterRequest);
 
@@ -83,13 +90,12 @@ const ManageUserPage = () => {
     if (e.target.value === "All") {
       setFilterRequest({
         type: "",
-      })
+      });
     } else {
       setFilterRequest({
         type: e.target.value,
-      })
+      });
     }
-
   };
 
   const handlePageChange = (e, value) => {
@@ -139,7 +145,6 @@ const ManageUserPage = () => {
         return <ArrowDropUp />;
       }
     }
-    return null;
   };
   return (
     <>
