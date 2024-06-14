@@ -178,7 +178,7 @@ const CreateUser = () => {
         if (users.gender) {
           users.gender = +users.gender;
         }
-        const response = await axios.post("https://localhost:7083/api/users", {
+        const response = await axios.post("http://localhost:7083/api/users", {
           ...users,
           dateOfBirth: users.dateOfBirth ? formatDate(users.dateOfBirth) : null,
           joinedDate: users.joinedDate ? formatDate(users.joinedDate) : null,

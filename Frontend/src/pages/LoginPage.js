@@ -17,6 +17,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
+import { path } from "../routes/routeContants";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -32,7 +33,7 @@ const LoginPage = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "https://localhost:7083/api/users/login",
+        "http://localhost:7083/api/users/login",
         { username, password }
       );
       const data = response.data;
@@ -41,7 +42,7 @@ const LoginPage = () => {
         localStorage.setItem("token", data.token);
         if (data.i)
         localStorage.setItem("password", password);
-        navigate("/");
+        navigate(path.home);
       } else {
         setAlertOpen(true);
       }

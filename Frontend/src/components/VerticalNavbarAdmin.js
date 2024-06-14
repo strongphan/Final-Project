@@ -10,7 +10,8 @@ const VerticalNavbarAdmin = () => {
 
   return (
     <Box
-      sx={{ bgcolor: "grey.300", position: "sticky", top: 64, width: "300px" }}>
+      sx={{ bgcolor: "grey.300", position: "sticky", top: 64, width: "300px" }}
+    >
       <Box
         sx={{
           bgcolor: "white",
@@ -19,15 +20,10 @@ const VerticalNavbarAdmin = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
-        }}>
-        <img
-          src={Logo}
-          alt="Logo"
-          style={{ width: "100px", height: "100px" }}
-        />
-        <Typography
-          variant="h6"
-          style={{ color: "#D6001C" }}>
+        }}
+      >
+        <img src={Logo} alt="Logo" style={{ width: "100px", height: "100px" }} />
+        <Typography variant="h6" style={{ color: "#D6001C" }}>
           <b>Online Asset Management</b>
         </Typography>
       </Box>
@@ -35,92 +31,99 @@ const VerticalNavbarAdmin = () => {
         <ListItem
           button
           component={Link}
-          to="/"
+          to="/home"
           sx={{
             "&:hover": {
               bgcolor: "#D6001C",
               "& .MuiListItemText-primary": { color: "white" },
             },
-            backgroundColor: location.pathname === "/" && "#D6001C",
-            color: location.pathname === "/" && "white",
-          }}>
+            backgroundColor:
+              location.pathname.startsWith("/home") && "#D6001C",
+            color:
+              location.pathname.startsWith("/home") && "white",
+          }}
+        >
           <ListItemText primary={<b>Home</b>} />
         </ListItem>
         <ListItem
           button
           component={Link}
           to="/manage-user"
-          disabled={!isAuthenticated}
           sx={{
             "&:hover": {
               bgcolor: "#D6001C",
               "& .MuiListItemText-primary": { color: "white" },
             },
-            backgroundColor: location.pathname === "/manage-user" && "#D6001C",
-            color: location.pathname === "/manage-user" && "white",
-          }}>
+            backgroundColor:
+              location.pathname.startsWith("/manage-user") && "#D6001C",
+            color:
+              location.pathname.startsWith("/manage-user") && "white",
+          }}
+        >
           <ListItemText primary={<b>Manage User</b>} />
         </ListItem>
         <ListItem
           button
           component={Link}
           to="/manage-asset"
-          disabled={!isAuthenticated}
           sx={{
             "&:hover": {
               bgcolor: "#D6001C",
               "& .MuiListItemText-primary": { color: "white" },
             },
-            backgroundColor: location.pathname === "/manage-asset" && "#D6001C",
-            color: location.pathname === "/manage-asset" && "white",
-          }}>
+            backgroundColor:
+              location.pathname.startsWith("/manage-asset") && "#D6001C",
+            color: location.pathname.startsWith("/manage-asset") && "white",
+          }}
+        >
           <ListItemText primary={<b>Manage Asset</b>} />
         </ListItem>
         <ListItem
           button
           component={Link}
           to="/manage-assignment"
-          disabled={!isAuthenticated}
           sx={{
             "&:hover": {
               bgcolor: "#D6001C",
               "& .MuiListItemText-primary": { color: "white" },
             },
             backgroundColor:
-              location.pathname === "/manage-assignment" && "#D6001C",
-            color: location.pathname === "/manage-assignment" && "white",
-          }}>
+              location.pathname.startsWith("/manage-assignment") && "#D6001C",
+            color: location.pathname.startsWith("/manage-assignment") && "white",
+          }}
+        >
           <ListItemText primary={<b>Manage Assignment</b>} />
         </ListItem>
         <ListItem
           button
           component={Link}
           to="/request-for-returning"
-          disabled={!isAuthenticated}
           sx={{
             "&:hover": {
               bgcolor: "#D6001C",
               "& .MuiListItemText-primary": { color: "white" },
             },
             backgroundColor:
-              location.pathname === "/request-for-returning" && "#D6001C",
-            color: location.pathname === "/request-for-returning" && "white",
-          }}>
+              location.pathname.startsWith("/request-for-returning") && "#D6001C",
+            color: location.pathname.startsWith("/request-for-returning") && "white",
+          }}
+        >
           <ListItemText primary={<b>Request for Returning</b>} />
         </ListItem>
         <ListItem
           button
           component={Link}
           to="/report"
-          disabled={!isAuthenticated}
           sx={{
             "&:hover": {
               bgcolor: "#D6001C",
               "& .MuiListItemText-primary": { color: "white" },
             },
-            backgroundColor: location.pathname === "/report" && "#D6001C",
-            color: location.pathname === "/report" && "white",
-          }}>
+            backgroundColor:
+              location.pathname.startsWith("/report") && "#D6001C",
+            color: location.pathname.startsWith("/report") && "white",
+          }}
+        >
           <ListItemText primary={<b>Report</b>} />
         </ListItem>
       </List>

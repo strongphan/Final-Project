@@ -41,8 +41,10 @@ const VerticalNavbarStaff = () => {
               bgcolor: "#D6001C",
               "& .MuiListItemText-primary": { color: "white" },
             },
-            backgroundColor: location.pathname === "/" && "#D6001C",
-            color: location.pathname === "/" && "white",
+            backgroundColor:
+              location.pathname.startsWith("/home") && "#D6001C",
+            color:
+              location.pathname.startsWith("/home") && "white",
           }}>
           <ListItemText primary={<b>Home</b>} />
         </ListItem>
