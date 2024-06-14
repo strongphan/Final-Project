@@ -19,6 +19,7 @@ const Header = () => {
   const handleLogout = () => {
     setIsAuthenticated(true);
     localStorage.removeItem("token");
+    localStorage.removeItem("password");
     navigate("/login");
     window.location.reload();
   };
