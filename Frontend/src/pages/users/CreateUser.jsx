@@ -23,12 +23,12 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useAuthContext } from "../../context/AuthContext";
-import { removeExtraWhitespace } from "../../utils/TrimValue";
-import { isValidDateValue } from "@testing-library/user-event/dist/utils";
+import {removeExtraWhitespace} from "../../utils/TrimValue";
 
 const CreateUser = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuthContext();
+  const [error, setError] = useState('');
   const [users, setUsers] = useState({
     firstName: "",
     lastName: "",
@@ -36,7 +36,7 @@ const CreateUser = () => {
     gender: 1,
     joinedDate: null,
     type: 0,
-    location: localStorage.getItem("location"),
+    location: localStorage.getItem('location'),
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -56,9 +56,7 @@ const CreateUser = () => {
 
   const handleChange = (event) => {
     let { name, value } = event.target;
-    setUsers({ ...users, [name]: value });
-    const isValid = /^[a-zA-Z]{2,20}$/.test(value);
-
+    
     let errorMessage = "";
     if (value.trim() === "") {
       errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
@@ -66,11 +64,10 @@ const CreateUser = () => {
       errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} must be at least 2 characters long.`;
     } else if (value.length > 20) {
       errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} must not exceed 20 characters.`;
-    } else if (!isValid) {
-      errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} does not contain space`;
-    }
+    } 
+    
     value = removeExtraWhitespace(value);
-
+    setUsers({ ...users, [name]: value });
     setFormErrors({ ...formErrors, [name]: errorMessage });
   };
 
@@ -82,11 +79,18 @@ const CreateUser = () => {
 
     let errorMessage = "";
     if (trimmedValue.trim() === "") {
-      errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
-    } else if (trimmedValue.length < 2) {
-      errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} must be at least 2 characters long.`;
-    } else if (trimmedValue.length > 20) {
-      errorMessage = `${name.charAt(0).toUpperCase() + name.slice(1)} must not exceed 20 characters.`;
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } is required`;
+    } else if (trimmedValue.length < 2 ) {
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } must be at least 2 characters long.`;
+    }
+    else if ( trimmedValue.length > 20) {
+      errorMessage = `${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      } must not exceed 20 characters.`;
     }
 
     setFormErrors({ ...formErrors, [name]: errorMessage });
@@ -94,21 +98,35 @@ const CreateUser = () => {
 
   const handleTypeChange = (event) => {
     const { name, value } = event.target;
-    if (value === 0) {
-      setUsers({ ...users, [name]: value, location: localStorage.getItem("location") });
-    } else {
-      setUsers({ ...users, [name]: value });
+    //type staff: set as admin
+    if(value === 0){
+      setUsers({...users,[name]: value, location: localStorage.getItem('location') });
     }
+    else {
+      setUsers({ ...users, [name]: value });
+    } 
   };
-
   const handleGenderChange = (event) => {
     const { name, value } = event.target;
     setUsers({ ...users, [name]: value });
   };
 
-  const handleLocationChange = (event) => {
+  const handleNameChange = (event) => {
+    let errorMessage = '';
     const { name, value } = event.target;
     setUsers({ ...users, [name]: value });
+    if(users.firstName && name === 'firstName' ){
+      const isValid = /^[a-zA-Z]{2,20}$/.test(value);
+      if(!isValid){
+        errorMessage = `First name must contain only alphabetical characters.`;
+        setFormErrors({ ...formErrors, [name]: errorMessage });
+
+      }
+    }  };
+
+  const handleLocationChange = (event) => {
+    const { name, value } = event.target;
+    setUsers({...users, [name]: value });
   };
 
   const handleDateChange = (name, date) => {
@@ -123,12 +141,11 @@ const CreateUser = () => {
 
   const isWeekend = (date) => {
     const day = date?.getDay();
-    return day === 6 || day === 0;
+    return day === 6 || day === 0; 
   };
 
   function isValidDate(dateString) {
-    if(dateString==='') return false;
-    // Check if the format is correct
+    console.log("dateString: "+ users.joinedDate);
     const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
     if (!regex.test(dateString)) {
       return false;
@@ -137,22 +154,18 @@ const CreateUser = () => {
     const day = parseInt(parts[0], 10);
     const month = parseInt(parts[1], 10);
     const year = parseInt(parts[2], 10);
-  
+
     if (month < 1 || month > 12 || year < 1000 || year > 9999) {
       return false;
     }
-
+  
     const daysInMonth = new Date(year, month, 0).getDate();
     return day > 0 && day <= daysInMonth;
   }
   
-
   useEffect(() => {
     let errorMessage = "";
     if (touched.joinedDate) {
-      if(!isValidDate(users.dateOfBirth)){
-        errorMessage = "Joined date is required.";
-      } else {
         const joined = new Date(users.joinedDate);
         const dob = new Date(users.dateOfBirth);
 
@@ -161,30 +174,49 @@ const CreateUser = () => {
         } else if (isWeekend(joined)) {
           errorMessage = "Joined date must not be on a weekend.";
         }
-      }
+    
     }
 
     setFormErrors((prevErrors) => ({ ...prevErrors, joinedDate: errorMessage }));
   }, [users.joinedDate, users.dateOfBirth, touched.joinedDate]);
 
+  const errorMessage = React.useMemo(() => {
+    switch (error) {
+      // case 'maxDate':
+      // case 'minDate': {
+      //   return 'Invalid Date';
+      // }
+
+      case 'invalidDate': {
+        return 'Invalid Date';
+      }
+
+      default: {
+        return '';
+      }
+    }
+  }, [error]);
+
+
   useEffect(() => {
     let errorMessage = "";
     if (touched.dateOfBirth) {
       // if (!users.dateOfBirth) {
-      if(!isValidDate(users.dateOfBirth)){
-        errorMessage = "Date of birth is required.";
-      } else {
+      //   errorMessage = "Date of birth is required.";
+      // } 
+       
         const dob = new Date(users.dateOfBirth);
         const age = Math.floor((Date.now() - dob) / (365.25 * 24 * 60 * 60 * 1000));
 
         if (age < 18) {
-          errorMessage = "User is under 18. Please select a different date";
+          errorMessage = "User is under 18. Please select a different date.";
         }
-      }
+      
     }
 
     setFormErrors((prevErrors) => ({ ...prevErrors, dateOfBirth: errorMessage }));
   }, [users.dateOfBirth, touched.dateOfBirth]);
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -241,20 +273,20 @@ const CreateUser = () => {
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
                 </Typography>
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={9} >
                 <TextField
-                  sx={{
-                    "& label.Mui-focused": { color: "#000" },
-                    "& .MuiOutlinedInput-root": {
-                      "&.Mui-focused fieldset": { borderColor: "#000" },
-                    },
-                  }}
+              sx={{
+                "& label.Mui-focused": { color: "#000" },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#000" },
+                },
+              }}
                   placeholder="First Name"
                   onBlur={handleChange}
                   fullWidth
                   name="firstName"
                   value={users.firstName}
-                  onChange={handleChange}
+                  onChange={handleNameChange}
                   margin="dense"
                   error={formErrors.firstName}
                 />
@@ -262,7 +294,6 @@ const CreateUser = () => {
                   <FormHelperText error>{formErrors.firstName}</FormHelperText>
                 )}
               </Grid>
-
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
                   Last Name
@@ -271,52 +302,54 @@ const CreateUser = () => {
               </Grid>
               <Grid item xs={9}>
                 <TextField
-                  sx={{
-                    "& label.Mui-focused": { color: "#000" },
-                    "& .MuiOutlinedInput-root": {
-                      "&.Mui-focused fieldset": { borderColor: "#000" },
-                    },
-                  }}
+                              sx={{
+                                "& label.Mui-focused": { color: "#000" },
+                                "& .MuiOutlinedInput-root": {
+                                  "&.Mui-focused fieldset": { borderColor: "#000" },
+                                },
+                              }}
                   placeholder="Last Name"
-                  onBlur={handleLastNameChange}
                   fullWidth
                   name="lastName"
                   value={users.lastName}
+                  onBlur={handleLastNameChange}
                   onChange={handleLastNameChange}
-                  margin="dense"
-                  error={formErrors.lastName}
                 />
                 {formErrors.lastName && (
                   <FormHelperText error>{formErrors.lastName}</FormHelperText>
                 )}
               </Grid>
-
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
-                  Date of Birth
+                  Date Of Birth
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
                 </Typography>
               </Grid>
               <Grid item xs={9}>
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={vi}>
                   <DatePicker
-              sx={{
-                "& label.Mui-focused": { color: "#000" },
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": { borderColor: "#000" },
-                },
-              }}
-                  onBlur={handleChange}
+                    onError={(newError) => setError(newError)}
+                    slotProps={{
+                      textField: {
+                        helperText: errorMessage,
+                      },
+                    }}
+                                sx={{
+                                  "& label.Mui-focused": { color: "#000" },
+                                  "& .MuiOutlinedInput-root": {
+                                    "&.Mui-focused fieldset": { borderColor: "#000" },
+                                  },
+                                }}
+                    format="dd/MM/yyyy"
+                    label="Date Of Birth"
                     value={users.dateOfBirth}
-                    inputFormat="dd/MM/yyyy"
                     onChange={(date) => handleDateChange("dateOfBirth", date)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         fullWidth
                         margin="dense"
-                        error={Boolean(formErrors.dateOfBirth)}
-                        onBlur={() => setTouched({ ...touched, dateOfBirth: true })}
+                        error={formErrors.dateOfBirth && touched.dateOfBirth}
                       />
                     )}
                   />
@@ -325,55 +358,45 @@ const CreateUser = () => {
                   <FormHelperText error>{formErrors.dateOfBirth}</FormHelperText>
                 )}
               </Grid>
-
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
                   Gender
                   <span style={{ color: "#d32f2f", marginLeft: "4px" }}>*</span>
                 </Typography>
               </Grid>
-<Grid item xs={9}>
-  <FormControl component="fieldset">
-    <RadioGroup
-      row
-      aria-label="gender"
-      name="gender"
-      value={users.gender}
-      onChange={handleGenderChange}
-    >
-      <FormControlLabel
-        value="0"
-        control={
-          <Radio
-            sx={{
-              color: "#000", 
-              "&.Mui-checked": {
-                color: "#d32f2f", 
-              },
-            }}
-          />
-        }
-        label="Female"
-      />
-       <FormControlLabel
-        value="1"
-        control={
-          <Radio
-            sx={{
-              color: "#000", 
-              "&.Mui-checked": {
-                color: "#d32f2f", 
-              },
-            }}
-          />
-        }
-        label="Male"
-      />
-    </RadioGroup>
-  </FormControl>
-</Grid>
-
-
+              <Grid item xs={9}>
+                <RadioGroup
+                  name="gender"
+                  value={users.gender}
+                  onChange={handleGenderChange}
+                  row
+                >
+                  <FormControlLabel
+                    value={1}
+                    control={
+                      <Radio
+                        sx={{
+                          color: "#000",
+                          "&.Mui-checked": { color: "#d32f2f" },
+                        }}
+                      />
+                    }
+                    label="Female"
+                  />
+                  <FormControlLabel
+                    value={2}
+                    control={
+                      <Radio
+                        sx={{
+                          color: "#000",
+                          "&.Mui-checked": { color: "#d32f2f" },
+                        }}
+                      />
+                    }
+                    label="Male"
+                  />
+                </RadioGroup>
+              </Grid>
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
                   Joined Date
@@ -383,22 +406,29 @@ const CreateUser = () => {
               <Grid item xs={9}>
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={vi}>
                   <DatePicker
-              sx={{
-                "& label.Mui-focused": { color: "#000" },
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": { borderColor: "#000" },
-                },
-              }}
+                  onError={(newError) => setError(newError)}
+                    slotProps={{
+                      textField: {
+                        helperText: errorMessage,
+                      },
+                    }}
+                                                  sx={{
+                                                    "& label.Mui-focused": { color: "#000" },
+                                                    "& .MuiOutlinedInput-root": {
+                                                      "&.Mui-focused fieldset": { borderColor: "#000" },
+                                                    },
+                                                  }}
+                    format="dd/MM/yyyy"
+                    label="Joined Date"
                     value={users.joinedDate}
-                    inputFormat="dd/MM/yyyy"
                     onChange={(date) => handleDateChange("joinedDate", date)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         fullWidth
                         margin="dense"
-                        error={Boolean(formErrors.joinedDate)}
-                        onBlur={() => setTouched({ ...touched, joinedDate: true })}
+                        required
+                        error={formErrors.joinedDate && touched.joinedDate}
                       />
                     )}
                   />
@@ -407,7 +437,6 @@ const CreateUser = () => {
                   <FormHelperText error>{formErrors.joinedDate}</FormHelperText>
                 )}
               </Grid>
-
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
                   Type
@@ -415,24 +444,35 @@ const CreateUser = () => {
                 </Typography>
               </Grid>
               <Grid item xs={9}>
-                <FormControl fullWidth margin="dense">
+                <FormControl
+                  fullWidth
+                  margin="dense"
+                  required
+                  error={formErrors.type}
+                  sx={{
+                    "& label.Mui-focused": { color: "#000" },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused fieldset": { borderColor: "#000" },
+                    },
+                  }}
+                >
                   <InputLabel id="type-label">Type</InputLabel>
                   <Select
-                    sx={{
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#000" },
-                    }}
+
                     labelId="type-label"
                     name="type"
                     value={users.type}
                     onChange={handleTypeChange}
                     label="Type"
                   >
-                    <MenuItem value={0}>Admin</MenuItem>
-                    <MenuItem value={1}>Staff</MenuItem>
+                    <MenuItem value={1}>Admin</MenuItem>
+                    <MenuItem value={0}>Staff</MenuItem>
                   </Select>
+                  {formErrors.type && (
+                    <FormHelperText error>Type is required!</FormHelperText>
+                  )}
                 </FormControl>
               </Grid>
-
               <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
                 <Typography>
                   Location
@@ -440,35 +480,60 @@ const CreateUser = () => {
                 </Typography>
               </Grid>
               <Grid item xs={9}>
-                <FormControl fullWidth margin="dense">
+                <FormControl
+                  fullWidth
+                  margin="dense"
+                  required
+                  error={formErrors.location}
+                  sx={{
+                    "& label.Mui-focused": { color: "#000" },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused fieldset": { borderColor: "#000" },
+                    },
+                  }}
+                >
                   <InputLabel id="location-label">Location</InputLabel>
                   <Select
-                    sx={{
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#000" },
-                    }}
                     labelId="location-label"
                     name="location"
                     value={users.location}
                     onChange={handleLocationChange}
                     label="Location"
+                    disabled={users.type === 0}
                   >
-                    <MenuItem value={0}>Hồ Chí Minh</MenuItem>
-                    <MenuItem value={1}>Hà Nội</MenuItem>
+                    <MenuItem value="HaNoi">Ha Noi</MenuItem>
+                    <MenuItem value="HCM">Ho Chi Minh</MenuItem>
                   </Select>
+                  {formErrors.location && (
+                    <FormHelperText error>{formErrors.location}</FormHelperText>
+                  )}
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12} sx={{ mt: 2 }}>
-                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <Grid item xs={12}>
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}
+                >
                   <Button
                     variant="contained"
-                    color="primary"
                     type="submit"
-                    sx={{ marginRight: 1 }}
+                    sx={{
+                      backgroundColor: "#d32f2f",
+                      mr: 3,
+                      "&:hover": {
+                        backgroundColor: "#a50000",
+                      },
+                    }}
+                    disabled={Object.values(formErrors).some((error) => error)}
+                    onClick={handleSubmit}
                   >
                     Save
                   </Button>
-                  <Button variant="outlined" color="secondary" onClick={() => navigate("/manage-user")}>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => navigate("/manage-user")}
+                  >
                     Cancel
                   </Button>
                 </Box>
