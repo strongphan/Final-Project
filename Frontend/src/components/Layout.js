@@ -250,7 +250,8 @@ const Layout = ({ children }) => {
             disabled={!!newPasswordError || !!confirmPasswordError}
             onClick={handlePasswordChange}
             variant="contained"
-            sx={{ bgcolor: "#D6001C",
+            sx={{
+              bgcolor: "#D6001C",
               "&:hover": { bgcolor: "#D6001C" },
             }}
           >
